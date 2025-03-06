@@ -1,10 +1,5 @@
 /**
-   @Hardware: M5AtomS3 + Atomic PoE Base
-   @Platform Version: Arduino M5Stack Board Manager v2.0.9
-   @Dependent Library:
-   M5AtomS3: https://github.com/m5stack/M5AtomS3
-   M5Unified: https://github.com/m5stack/M5Unified
-   M5_Ethernet: https://github.com/m5stack/M5-Ethernet
+   @Hardware: M5AtomS3 + M5Stack ESP32 Ethernet Unit with PoE
 */
 
 #include <M5Unified.h> 

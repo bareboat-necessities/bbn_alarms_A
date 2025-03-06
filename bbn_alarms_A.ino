@@ -17,17 +17,17 @@ ReactESP app;
 #include "i2c_ads1115.h"
 #include "gpio_jsn_sr04t.h"
 
-// M5AtomLiteS3
-#define SCK  5
-#define MISO 7
-#define MOSI 8
-#define CS   6
+// M5AtomS3Lite
+#define SCK  G5
+#define MISO G7
+#define MOSI G8
+#define CS   G6
 
 // M5AtomLite
-//#define SCK  22
-//#define MISO 23
-//#define MOSI 33
-//#define CS   19
+//#define SCK  G22
+//#define MISO G23
+//#define MOSI G33
+//#define CS   G19
 
 byte mac[] = {0xDE, 0xAD, 0xBE, 0xDE, 0xCA, 0xDE};  // Host name will be WIZnetDECADE on local LAN (WIZnet + 3 last MAC octets)
 
@@ -35,7 +35,7 @@ EthernetServer server(80);
 
 // Choose the analog pin to get semi-random data from for SSL
 // Pick a pin that's not connected or attached to a randomish voltage source
-const int rand_pin = 2; // 34 /* atom-lite */;
+const int rand_pin = G2; // G34 /* atom-lite */;
 
 // Initialize the SSL client library
 // We input an EthernetClient, our trust anchors, and the analog pin

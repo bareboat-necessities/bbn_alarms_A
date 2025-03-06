@@ -100,5 +100,37 @@ const char settings_page[] PROGMEM = R"=====(
 </html>
 )=====";
 
+void begin_response(EthernetClient client, int request_status = 200) {
+  client.println("HTTP/1.1 " + String(request_status) + (request_status == 200 ? String(" OK") : String(" Not Found")));
+  client.println("Content-Type: text/html");
+  client.println("Connection: close");  // the connection will be closed after completion of the response
+}
+
+void main_page(EthernetClient client, int request_status = 200) {
+  begin_response(client, request_status);
+  client.printf(settings_page, style, form);
+  client.println();
+}
+
+void error_page(EthernetClient client, int request_status = 200) {
+  begin_response(client, request_status);
+}
+
+void handle_OnConnect(EthernetClient client) {
+  main_page(client);
+  Serial.println("Connection!");
+}
+
+void handle_OnSettings(EthernetClient client) {
+  //client.println(html_response);
+  Serial.println("Settings!");
+}
+
+void handle_NotFound(EthernetClient client, String url) {
+  error_page(client, 400);
+  client.println("<a>The path " + url + " doesn't exist</a>");
+  Serial.println("Error, unrecognised path");
+}
+
 #endif
 

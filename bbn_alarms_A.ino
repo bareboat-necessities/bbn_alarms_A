@@ -5,7 +5,10 @@
 #include <M5Unified.h> 
 #include <SPI.h>
 #include <M5_Ethernet.h>
+#include <ReactESP.h>  // https://github.com/mairas/ReactESP
 
+using namespace reactesp;
+ReactESP app;
 
 #include "conf_store.h"
 #include "sleep_n_wakeup.h"

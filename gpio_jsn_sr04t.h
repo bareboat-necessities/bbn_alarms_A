@@ -5,8 +5,8 @@
 
 #include "NmeaXDR.h"
 
-#define NEWPING_TRIGGER_PIN  G22  // Pin tied to trigger pin on the ultrasonic sensor.
-#define NEWPING_ECHO_PIN     G19  // Pin tied to echo pin on the ultrasonic sensor.
+#define NEWPING_TRIGGER_PIN  G7  // Pin tied to trigger pin on the ultrasonic sensor.
+#define NEWPING_ECHO_PIN     G8  // Pin tied to echo pin on the ultrasonic sensor.
 #define NEWPING_MAX_DISTANCE 100 // Maximum distance we want to ping for (in centimeters). Maximum sensor distance is rated at 400-500cm.
 
 NewPing gpio_jsn_sr04t_sonar(NEWPING_TRIGGER_PIN, NEWPING_ECHO_PIN, NEWPING_MAX_DISTANCE); // NewPing setup of pins and maximum distance.

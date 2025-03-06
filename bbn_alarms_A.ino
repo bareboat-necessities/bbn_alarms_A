@@ -3,14 +3,13 @@
 */
 
 #include <M5Unified.h> 
-
 #include <SPI.h>
 #include <M5_Ethernet.h>
-#include <SSLClient.h>
-#include <UrlEncode.h>
-#include "trust_anchors.h"
 
-#define SERVER "api.callmebot.com"
+#include <messenger.h>
+#include <web_server.h>
+#include <i2c_ads1115.h>
+#include <gpio_jsn_sr04t.h>
 
 // M5AtomLiteS3
 #define SCK  5
@@ -38,9 +37,6 @@ EthernetClient base_client;
 SSLClient ssl_client(base_client, TAs, (size_t)TAs_NUM, rand_pin);
 
 unsigned long byteCount = 0;
-
-
-
 
 void setup() {
   M5.begin();
@@ -85,12 +81,6 @@ void setup() {
   Serial.println(Ethernet.localIP());
 }
 
-// +international_country_code + phone number
-// Portugal +351, example: +351912345678
-// TODO:
-String phoneNumber = "REPLACE_WITH_YOUR_PHONE_NUMBER";
-String apiKey = "REPLACE_WITH_API_KEY";
-String message = "Test from M5 ESP32";
 
 void loop() {
   M5.update();

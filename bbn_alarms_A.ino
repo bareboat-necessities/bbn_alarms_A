@@ -90,6 +90,7 @@ void setup() {
 
 void loop() {
   M5.update();
+  app.tick();
 
   // listen for incoming clients
   EthernetClient client = server.available();

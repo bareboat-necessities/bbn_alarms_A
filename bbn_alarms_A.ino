@@ -6,6 +6,9 @@
 #include <SPI.h>
 #include <M5_Ethernet.h>
 
+
+#include "conf_store.h"
+#include "sleep_n_wakeup.h"
 #include "messenger.h"
 #include "web_server.h"
 #include "i2c_ads1115.h"

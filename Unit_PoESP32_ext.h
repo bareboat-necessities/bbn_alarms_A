@@ -83,11 +83,7 @@ void Unit_PoESP32::sendCMD(String command) {
 bool Unit_PoESP32::checkDeviceConnect() {
     sendCMD("AT");
     _readstr = waitMsg(100);
-    if (_readstr.indexOf("OK") != -1) {
-        return true;
-    } else {
-        return false;
-    }
+    return _readstr.indexOf("OK") != -1;
 }
 
 /*! @brief Detecting device ETH connection status
@@ -95,12 +91,7 @@ bool Unit_PoESP32::checkDeviceConnect() {
 bool Unit_PoESP32::checkETHConnect() {
     sendCMD("AT+CIPETH?");
     _readstr = waitMsg(1000);
-
-    if (_readstr.indexOf("192") != -1) {
-        return true;
-    } else {
-        return false;
-    }
+    return _readstr.indexOf("192") != -1;
 }
 
 /*! @brief Create a TCP client
@@ -110,11 +101,7 @@ bool Unit_PoESP32::createTCPClient(String ip, int port) {
     delay(500);
     sendCMD("AT+CIPSTART=\"TCP\",\"" + ip + "\"," + String(port));
     _readstr = waitMsg(1000);
-    if (_readstr.indexOf("CONNECT") != -1) {
-        return true;
-    } else {
-        return false;
-    }
+    return _readstr.indexOf("CONNECT") != -1;
 }
 
 /*! @brief send a TCP data
@@ -125,12 +112,7 @@ bool Unit_PoESP32::sendTCPData(uint8_t* buffer, size_t size) {
     _serial->write(buffer, size);
     _serial->print("");
     _readstr = waitMsg(500);
-
-    if (_readstr.indexOf("SEND OK") != -1) {
-        return true;
-    } else {
-        return false;
-    }
+    return _readstr.indexOf("SEND OK") != -1;
 }
 
 /*! @brief Create a MQTT client
@@ -145,11 +127,7 @@ bool Unit_PoESP32::createMQTTClient(String host, String port, String clientId,
     sendCMD("AT+MQTTCONN=0,\"" + host + "\"," + port + ",0");
     _readstr = waitMsg(4000);
     Serial.print(_readstr);
-    if (_readstr.indexOf("+MQTTCONNECTED") != -1) {
-        return true;
-    } else {
-        return false;
-    }
+    return _readstr.indexOf("+MQTTCONNECTED") != -1;
 }
 
 /*! @brief public a MQTT message
@@ -157,13 +135,8 @@ bool Unit_PoESP32::createMQTTClient(String host, String port, String clientId,
 bool Unit_PoESP32::publicMQTTMsg(String topic, String payload, String qos) {
     delay(500);
     _readstr = waitMsg(500);
-
     sendCMD("AT+MQTTPUB=0,\"" + topic + "\",\"" + payload + "\"," + qos + ",0");
-    if (_readstr.indexOf("OK") != -1) {
-        return true;
-    } else {
-        return false;
-    }
+    return _readstr.indexOf("OK") != -1;
 }
 
 /*! @brief subscribe a MQTT message
@@ -172,12 +145,7 @@ bool Unit_PoESP32::subscribeMQTTMsg(String topic, String qos) {
     delay(500);
     sendCMD("AT+MQTTSUB=0,\"" + topic + "\"," + qos + "");
     _readstr = waitMsg(500);
-
-    if (_readstr.indexOf("OK") != -1) {
-        return true;
-    } else {
-        return false;
-    }
+    return _readstr.indexOf("OK") != -1;
 }
 
 /*! @brief Create a HTTP client

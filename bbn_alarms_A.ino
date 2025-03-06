@@ -4,7 +4,7 @@
 
 #include <M5Unified.h> 
 #include <SPI.h>
-#include <M5_Ethernet.h>
+#include <Unit_PoESP32.h>
 #include <ReactESP.h>  // https://github.com/mairas/ReactESP
 
 using namespace reactesp;
@@ -16,6 +16,8 @@ ReactESP app;
 #include "web_server.h"
 #include "i2c_ads1115.h"
 #include "gpio_jsn_sr04t.h"
+
+Unit_PoESP32 eth;
 
 // M5AtomS3Lite
 #define SCK  G5

@@ -24,7 +24,7 @@ jobs:
         arduino-board-fqbn: esp32:esp32:m5stack-atoms3:CDCOnBoot=cdc
         arduino-platform: esp32:esp32@2.0.17
         platform-url: https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
-        required-libraries: M5Unified@0.2.4,M5-ADS1115@1.0.0,NewPing@1.9.7,M5Unit-PoESP32@0.0.1,M5-Ethernet@4.0.0,M5GFX@0.2.6,SSLClient@1.6.11,UrlEncode@1.0.1,ReactESP@2.1.0
+        required-libraries: M5Unified@0.2.4,M5-ADS1115@1.0.0,NewPing@1.9.7,M5-Ethernet@4.0.0,M5GFX@0.2.6,SSLClient@1.6.11,UrlEncode@1.0.1,ReactESP@2.1.0
         sketch-names: "*.ino"
         sketch-names-find-start: bbn_*
         extra-arduino-cli-args: "--warnings default --build-property compiler.libraries.ldflags=-Wl,--allow-multiple-definition "

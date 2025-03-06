@@ -4,12 +4,12 @@
 
 #include <M5Unified.h> 
 #include <SPI.h>
-#include <Unit_PoESP32.h>
 #include <ReactESP.h>  // https://github.com/mairas/ReactESP
 
 using namespace reactesp;
 ReactESP app;
 
+#include "Unit_PoESP32_ext.h"
 #include "conf_store.h"
 #include "sleep_n_wakeup.h"
 #include "messenger.h"

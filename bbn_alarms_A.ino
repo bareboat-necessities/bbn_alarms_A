@@ -124,6 +124,30 @@ void setup() {
 
 void loop() {
   M5.update();
+
+  // Check for incoming data from the Ethernet unit
+  if (Serial2.available()) {
+    String response = Serial2.readString();
+    Serial.println(response);
+
+    // Check if a new client has connected
+    if (response.startsWith("+IPD")) {
+      // Extract the connection ID and data
+      int connectionId = response.charAt(5) - '0';  // Get the connection ID
+      String data = response.substring(7);  // Get the data
+
+      Serial.print("Received data from connection ID: ");
+      Serial.println(connectionId);
+      Serial.print("Data: ");
+      Serial.println(data);
+
+      // Send a response back to the client
+      String responseMessage = "Hello from M5Stack TCP Server!";
+      eth.sendCMD("AT+CIPSEND=" + String(connectionId) + "," + String(responseMessage.length()));
+      delay(100);
+      eth.sendCMD(responseMessage);
+    }
+  }
   //  app.tick();
 
   /*

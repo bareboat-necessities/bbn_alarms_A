@@ -67,6 +67,8 @@ void setup() {
     delay(10);
   }
   Serial.println("ethernet connected");
+
+  Serial.println(eth.obtainLocalIP().c_str());
   /*
 
 

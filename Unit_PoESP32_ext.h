@@ -63,8 +63,8 @@ String Unit_PoESP32::waitMsg(unsigned long time) {
     String restr;
     unsigned long start = millis();
     while (1) {
-        if (Serial2.available() || (millis() - start) < time) {
-            String str = Serial2.readString();
+        if (_serial->available() || (millis() - start) < time) {
+            String str = _serial->readString();
             restr += str;
         } else {
             break;

@@ -152,7 +152,17 @@ void loop() {
   }
   if (M5.BtnA.wasPressed()) {
     Serial.println("BtnA.wasPressed");
-    eth.createSSLClient("example.com", 443);
+    //eth.createSSLClient("example.com", 443);
+    auto resp = eth.createSSLClient("api.callmebot.com", 443);   
+    int idx = resp.indexOf("CONNECT");
+    Serial.printf("idx %d\n", idx);
+    if (idx != -1 && idx > 1 && idx < 1024) {
+      int connectionId = resp.charAt(idx - 2) - '0';  // Get the connection ID
+      Serial.print("Established connection ID: ");
+      Serial.println(connectionId);
+    }
+    //String req = String("GET ") + "/whatsapp.php?phone=" + phoneNumber
+    //             + "&apikey=" + apiKey + "&text=" + urlEncode(message) + " HTTP/1.1";
   }
   //  app.tick();
 

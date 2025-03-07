@@ -100,8 +100,8 @@ bool Unit_PoESP32::checkETHConnect() {
 /*! @brief Obtain Local IP
     @return String. */
 String Unit_PoESP32::obtainLocalIP() {
-  sendCMD("AT+CIFSR?");
-  _readstr = waitMsg(50);
+  sendCMD("AT+CIFSR");
+  _readstr = waitMsg(1000);
   return _readstr;
 }
 

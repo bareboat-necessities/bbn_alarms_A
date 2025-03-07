@@ -39,6 +39,7 @@ class Unit_PoESP32 {
     String activateTcpServerPort80();
 
     bool createTCPClient(String ip, int port);
+    bool createSSLClient(String ip, int port);
     bool sendTCPData(uint8_t *buffer, size_t size);
 
     bool createMQTTClient(String host = "host", String port = "port",
@@ -128,8 +129,20 @@ String Unit_PoESP32::activateTcpServerPort80() {
 bool Unit_PoESP32::createTCPClient(String ip, int port) {
   sendCMD("AT+CIPCLOSE");
   delay(500);
-  sendCMD("AT+CIPSTART=\"TCP\",\"" + ip + "\"," + String(port));
+  sendCMD("AT+CIPSTARTEX=\"TCP\",\"" + ip + "\"," + String(port));
   _readstr = waitMsg(1000);
+  Serial.println(_readstr.c_str());
+  return _readstr.indexOf("CONNECT") != -1;
+}
+
+/*! @brief Create a SSL client
+    @return True if create successfully, false otherwise. */
+bool Unit_PoESP32::createSSLClient(String ip, int port) {
+  sendCMD("AT+CIPCLOSE");
+  delay(500);
+  sendCMD("AT+CIPSTARTEX=\"SSL\",\"" + ip + "\"," + String(port));
+  _readstr = waitMsg(1000);
+  Serial.println(_readstr.c_str());
   return _readstr.indexOf("CONNECT") != -1;
 }
 

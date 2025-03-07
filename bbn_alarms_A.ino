@@ -50,7 +50,7 @@ void setup() {
   auto cfg = M5.config();
   M5.begin(cfg);
   Serial.begin(115200);
-  
+
   Serial.println("device connecting");
   //Serial2.begin(9600, SERIAL_8N1, G6, G5);
   eth.Init(&Serial2, 9600, G1, G2);
@@ -60,6 +60,13 @@ void setup() {
   }
 
   Serial.println("device connected");
+
+
+  Serial.println("wait ethernet connect");
+  while (!eth.checkETHConnect()) {
+    delay(10);
+  }
+  Serial.println("ethernet connected");
   /*
 
 
@@ -106,7 +113,7 @@ void setup() {
 
 void loop() {
   M5.update();
-//  app.tick();
+  //  app.tick();
 
   /*
     // listen for incoming clients

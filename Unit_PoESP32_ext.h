@@ -83,7 +83,7 @@ void Unit_PoESP32::sendCMD(String command) {
     @return True if good connection, false otherwise. */
 bool Unit_PoESP32::checkDeviceConnect() {
   sendCMD("AT");
-  _readstr = waitMsg(100);
+  _readstr = waitMsg(1000);
   return _readstr.indexOf("OK") != -1;
 }
 

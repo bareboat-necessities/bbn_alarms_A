@@ -58,9 +58,11 @@ void setup() {
   while (!eth.checkDeviceConnect()) {
     delay(10);
   }
-
   Serial.println("device connected");
 
+  eth.sendCMD("AT+CWDHCP=1,1");
+  auto dhcpSetResponse = eth.waitMsg(1000);
+  Serial.println(dhcpSetResponse.c_str());
 
   Serial.println("wait ethernet connect");
   while (!eth.checkETHConnect()) {
@@ -76,7 +78,6 @@ void setup() {
 
   auto servActivationResponse = eth.activateTcpServerPort80();
   Serial.println(servActivationResponse.c_str());
-
 
   /*
 
@@ -148,6 +149,10 @@ void loop() {
       delay(100);
       eth.sendCMD(responseMessage);
     }
+  }
+  if (M5.BtnA.wasPressed()) {
+    Serial.println("BtnA.wasPressed");
+    eth.createSSLClient("example.com", 443);
   }
   //  app.tick();
 

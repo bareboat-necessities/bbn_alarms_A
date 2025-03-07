@@ -35,6 +35,8 @@ class Unit_PoESP32 {
     bool checkETHConnect();
     bool checkMQTTConnect();
     String obtainLocalIP();
+    String activateMUXMode();
+    String activateTcpServerPort80();
 
     bool createTCPClient(String ip, int port);
     bool sendTCPData(uint8_t *buffer, size_t size);
@@ -101,6 +103,22 @@ bool Unit_PoESP32::checkETHConnect() {
     @return String. */
 String Unit_PoESP32::obtainLocalIP() {
   sendCMD("AT+CIFSR");
+  _readstr = waitMsg(1000);
+  return _readstr;
+}
+
+/*! @brief Activate Multi Connection Mode
+    @return String. */
+String Unit_PoESP32::activateMUXMode() {
+  sendCMD("AT+CIPMUX=1");
+  _readstr = waitMsg(1000);
+  return _readstr;
+}
+
+/*! @brief Activate Multi Connection Mode
+    @return String. */
+String Unit_PoESP32::activateTcpServerPort80() {
+  sendCMD("AT+CIPSERVER=1,80");
   _readstr = waitMsg(1000);
   return _readstr;
 }

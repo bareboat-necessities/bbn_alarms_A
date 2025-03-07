@@ -68,7 +68,16 @@ void setup() {
   }
   Serial.println("ethernet connected");
 
-  Serial.println(eth.obtainLocalIP().c_str());
+  auto localInfo = eth.obtainLocalIP();
+  Serial.println(localInfo.c_str());
+
+  auto muxResponse = eth.activateMUXMode();
+  Serial.println(muxResponse.c_str());
+
+  auto servActivationResponse = eth.activateTcpServerPort80();
+  Serial.println(servActivationResponse.c_str());
+
+
   /*
 
 

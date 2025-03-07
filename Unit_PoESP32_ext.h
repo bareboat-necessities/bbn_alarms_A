@@ -34,6 +34,7 @@ class Unit_PoESP32 {
     bool checkDeviceConnect();
     bool checkETHConnect();
     bool checkMQTTConnect();
+    String obtainLocalIP();
 
     bool createTCPClient(String ip, int port);
     bool sendTCPData(uint8_t *buffer, size_t size);
@@ -92,8 +93,16 @@ bool Unit_PoESP32::checkDeviceConnect() {
 bool Unit_PoESP32::checkETHConnect() {
   sendCMD("AT+CIPETH?");
   _readstr = waitMsg(1000);
-  Serial.println(_readstr.c_str());
+  //Serial.println(_readstr.c_str());
   return _readstr.indexOf("192") != -1;
+}
+
+/*! @brief Obtain Local IP
+    @return String. */
+String Unit_PoESP32::obtainLocalIP() {
+  sendCMD("AT+CIFSR?");
+  _readstr = waitMsg(50);
+  return _readstr;
 }
 
 /*! @brief Create a TCP client

@@ -92,6 +92,7 @@ bool Unit_PoESP32::checkDeviceConnect() {
 bool Unit_PoESP32::checkETHConnect() {
   sendCMD("AT+CIPETH?");
   _readstr = waitMsg(1000);
+  Serial.println(_readstr.c_str());
   return _readstr.indexOf("192") != -1;
 }
 

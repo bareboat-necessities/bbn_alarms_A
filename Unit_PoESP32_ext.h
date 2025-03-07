@@ -115,7 +115,7 @@ String Unit_PoESP32::activateMUXMode() {
   return _readstr;
 }
 
-/*! @brief Activate Multi Connection Mode
+/*! @brief Activate TCP Server
     @return String. */
 String Unit_PoESP32::activateTcpServerPort80() {
   sendCMD("AT+CIPSERVER=1,80");

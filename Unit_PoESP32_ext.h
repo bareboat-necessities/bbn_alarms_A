@@ -28,7 +28,7 @@ class Unit_PoESP32 {
 
   public:
     void Init(HardwareSerial *serial = &Serial2, unsigned long baud = 9600,
-              uint8_t RX = 16, uint8_t TX = 17);
+              uint8_t RX = G1, uint8_t TX = G2);
     String waitMsg(unsigned long time);
     void sendCMD(String command);
     bool checkDeviceConnect();
@@ -37,19 +37,16 @@ class Unit_PoESP32 {
     String obtainLocalIP();
     String activateMUXMode();
     String activateTcpServerPort80();
-
-    bool createTCPClient(String ip, int port);
-    bool createSSLClient(String ip, int port);
+    String createTCPClient(String ip, int port);
+    String createSSLClient(String ip, int port);
     bool sendTCPData(uint8_t *buffer, size_t size);
-
     bool createMQTTClient(String host = "host", String port = "port",
                           String clientId  = "client id",
                           String user_name = "user", String user_pwd = "pwd");
     bool publicMQTTMsg(String topic, String payload, String qos = "0");
     bool subscribeMQTTMsg(String topic, String qos = "0");
-
     String createHTTPClient(
-      http_method_t method        = GET,
+      http_method_t method = GET,
       http_content_t content_type = APPLICATION_X_WWW_FORM_URLENCODED,
       String url = "", String payload = "");
 };
@@ -125,25 +122,25 @@ String Unit_PoESP32::activateTcpServerPort80() {
 }
 
 /*! @brief Create a TCP client
-    @return True if create successfully, false otherwise. */
-bool Unit_PoESP32::createTCPClient(String ip, int port) {
+    @return String. */
+String Unit_PoESP32::createTCPClient(String ip, int port) {
   sendCMD("AT+CIPCLOSE");
   delay(500);
   sendCMD("AT+CIPSTARTEX=\"TCP\",\"" + ip + "\"," + String(port));
   _readstr = waitMsg(1000);
   Serial.println(_readstr.c_str());
-  return _readstr.indexOf("CONNECT") != -1;
+  return _readstr;
 }
 
 /*! @brief Create a SSL client
-    @return True if create successfully, false otherwise. */
-bool Unit_PoESP32::createSSLClient(String ip, int port) {
+    @return String. */
+String Unit_PoESP32::createSSLClient(String ip, int port) {
   sendCMD("AT+CIPCLOSE");
   delay(500);
   sendCMD("AT+CIPSTARTEX=\"SSL\",\"" + ip + "\"," + String(port));
-  _readstr = waitMsg(1000);
+  _readstr = waitMsg(5000);
   Serial.println(_readstr.c_str());
-  return _readstr.indexOf("CONNECT") != -1;
+  return _readstr;
 }
 
 /*! @brief send a TCP data

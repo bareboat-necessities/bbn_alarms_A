@@ -6,8 +6,8 @@
 #include <SPI.h>
 #include <ReactESP.h>  // https://github.com/mairas/ReactESP
 
-using namespace reactesp;
-ReactESP app;
+//using namespace reactesp;
+//ReactESP app;
 
 #include "Unit_PoESP32_ext.h"
 #include "conf_store.h"
@@ -20,10 +20,10 @@ ReactESP app;
 Unit_PoESP32 eth;
 
 // M5AtomS3Lite
-#define SCK  G5
-#define MISO G7
-#define MOSI G8
-#define CS   G6
+//#define SCK  G5
+//#define MISO G7
+//#define MOSI G8
+//#define CS   G6
 
 // M5AtomLite
 //#define SCK  G22
@@ -53,7 +53,7 @@ void setup() {
   
   Serial.println("device connecting");
   //Serial2.begin(9600, SERIAL_8N1, G6, G5);
-  eth.Init(&Serial2, 9600, G6, G5);
+  eth.Init(&Serial2, 9600, G1, G2);
   Serial.println("wait device connect");
   while (!eth.checkDeviceConnect()) {
     delay(10);
@@ -106,7 +106,7 @@ void setup() {
 
 void loop() {
   M5.update();
-  app.tick();
+//  app.tick();
 
   /*
     // listen for incoming clients

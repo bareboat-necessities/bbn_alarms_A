@@ -13,7 +13,5 @@
 // TODO:
 String phoneNumber = "REPLACE_WITH_YOUR_PHONE_NUMBER";
 String apiKey = "REPLACE_WITH_API_KEY";
-String message = "Test from M5 ESP32";
-
 
 #endif

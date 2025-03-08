@@ -33,10 +33,6 @@ void setup() {
   }
   Serial.println("device connected");
 
-  delay(100);
-  auto muxResponse = eth.activateMUXMode();
-  Serial.println(muxResponse.c_str());
-
   Serial.println("wait ethernet connect");
   while (!eth.checkETHConnect()) {
     delay(10);
@@ -46,12 +42,17 @@ void setup() {
   auto localInfo = eth.obtainLocalIP();
   Serial.println(localInfo.c_str());
 
+  delay(1000);
+  auto muxResponse = eth.activateMUXMode();
+  Serial.println(muxResponse.c_str());
+
   auto servActivationResponse = eth.activateTcpServerPort80();
   Serial.println(servActivationResponse.c_str());
 }
 
 void loop() {
   M5.update();
+  // app.tick();
 
   // Check for incoming data from the Ethernet unit
   if (Serial2.available() > 4) {
@@ -114,57 +115,7 @@ void loop() {
       eth.sendCMD("AT+CIPSEND=" + String(connectionId) + "," + String(req.length()));
       delay(100);
       eth.sendCMD(req);
-      delay(5000);
-      //eth.sendCMD("AT+CIPCLOSE=" + String(connectionId));
-      //delay(1000);
+      delay(2000);
     }
   }
-  //  app.tick();
-
-  /*
-    // listen for incoming clients
-    EthernetClient client = server.available();
-    if (client) {
-      //Serial.println("new client");
-      String url_path = "";
-      String url_args = "";
-      int argument_reading = 0;
-
-      // An http request ends with a blank line
-      boolean currentLineIsBlank = true;
-      while (client.connected()) {
-        if (client.available()) {
-          char c = client.read();
-
-          // get arguments. note: path arguments must not have any blank spaces
-          if (c == ' ' || c == '?') argument_reading++;
-          if (argument_reading == 1 && c != ' ') url_path += c;
-          if (argument_reading == 2 && c != '?') url_args += c;
-
-          // check end of request
-          if (c == '\n' && currentLineIsBlank) {
-            // handle arguments
-            Serial.println(url_path.c_str());
-            Serial.println(url_args.c_str());
-            if (url_path == "/") handle_OnConnect(client);
-            else if (url_path == "/settings") handle_OnSettings(client);
-            else handle_NotFound(client, url_path);
-            break;
-          }
-          if (c == '\n') {
-            // you're starting a new line
-            currentLineIsBlank = true;
-          } else if (c != '\r') {
-            // you've gotten a character on the current line
-            currentLineIsBlank = false;
-          }
-        }
-      }
-      // give the web browser time to receive the data
-      delay(4);
-      // close the connection:
-      client.stop();
-    }
-
-  */
 }

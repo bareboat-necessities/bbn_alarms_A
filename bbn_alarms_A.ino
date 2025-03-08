@@ -33,6 +33,10 @@ void setup() {
   }
   Serial.println("device connected");
 
+  delay(100);
+  auto muxResponse = eth.activateMUXMode();
+  Serial.println(muxResponse.c_str());
+
   Serial.println("wait ethernet connect");
   while (!eth.checkETHConnect()) {
     delay(10);
@@ -41,10 +45,6 @@ void setup() {
 
   auto localInfo = eth.obtainLocalIP();
   Serial.println(localInfo.c_str());
-
-  delay(100);
-  auto muxResponse = eth.activateMUXMode();
-  Serial.println(muxResponse.c_str());
 
   auto servActivationResponse = eth.activateTcpServerPort80();
   Serial.println(servActivationResponse.c_str());
@@ -55,7 +55,7 @@ void loop() {
 
   // Check for incoming data from the Ethernet unit
   if (Serial2.available() > 4) {
-    String response = eth.waitMsg(200, NULL, NULL);
+    String response = eth.waitMsg(200, "Connection:", NULL);
     Serial.println(response);
 
     // Check if a new client has connected
@@ -66,35 +66,36 @@ void loop() {
       int connectionId = response.charAt(5 + idx) - '0';  // Get the connection ID
       String httpRequest = response.substring(7 + idx);  // Get the data
 
+      int idx2 = httpRequest.indexOf(":");
+      if (idx2 != -1) {
+        httpRequest = httpRequest.substring(idx2 + 1);
+      }
+
       Serial.print("Received data from connection ID: ");
       Serial.println(connectionId);
       Serial.print("Data: ");
       Serial.println(httpRequest);
 
-      HttpRequest parsedRequest = parseHttpRequest(httpRequest);
+      if (httpRequest.startsWith("GET")) {
+        HttpRequest parsedRequest = parseHttpRequest(httpRequest);
 
-      // Print the parsed request
-      Serial.println("Method: " + parsedRequest.method);
-      Serial.println("Path: " + parsedRequest.path);
-      Serial.println("Query String: " + parsedRequest.queryString);
-      Serial.println("Query Arguments:");
-      for (int i = 0; i < parsedRequest.queryArgCount; i++) {
-        Serial.println("  " + parsedRequest.queryArgs[i].key + " = " + parsedRequest.queryArgs[i].value);
+        // Print the parsed request
+        Serial.println("Method: " + parsedRequest.method);
+        Serial.println("Path: " + parsedRequest.path);
+        Serial.println("Query String: " + parsedRequest.queryString);
+        Serial.println("Query Arguments:");
+        for (int i = 0; i < parsedRequest.queryArgCount; i++) {
+          Serial.println("  " + parsedRequest.queryArgs[i].key + " = " + parsedRequest.queryArgs[i].value);
+        }
+        Serial.println("Headers:");
+        Serial.println(parsedRequest.headers);
+
+        handle_OnConnect(&eth, connectionId);
+        delay(500);
+        
+        eth.sendCMD("AT+CIPCLOSE=" + String(connectionId));
+        delay(1000);
       }
-      Serial.println("Headers:");
-      Serial.println(parsedRequest.headers);
-
-      handle_OnConnect(&eth, connectionId);
-      delay(3000);
-
-      eth.sendCMD("AT+CIPCLOSE=" + String(connectionId));
-      delay(1000);
-
-      // Send a response back to the client
-      //String responseMessage = "Hello from M5Stack TCP Server!\n";
-      //eth.sendCMD("AT+CIPSEND=" + String(connectionId) + "," + String(responseMessage.length()));
-      //delay(100);
-      //eth.sendCMD(responseMessage);
     }
   }
   if (M5.BtnA.wasPressed()) {
@@ -106,7 +107,7 @@ void loop() {
       int connectionId = resp.charAt(idx - 2) - '0';  // Get the connection ID
       Serial.print("Established connection ID: ");
       Serial.println(connectionId);
-      
+
       String message = "Hello from esp32!";
       String req = String("GET ") + "/whatsapp.php?phone=" + phoneNumber
                    + "&apikey=" + apiKey + "&text=" + urlEncode(message) + " HTTP/1.1\nHost: api.callmebot.com\nConnection: close\n\n";
@@ -114,8 +115,8 @@ void loop() {
       delay(100);
       eth.sendCMD(req);
       delay(5000);
-      eth.sendCMD("AT+CIPCLOSE=" + String(connectionId));
-      delay(1000);
+      //eth.sendCMD("AT+CIPCLOSE=" + String(connectionId));
+      //delay(1000);
     }
   }
   //  app.tick();

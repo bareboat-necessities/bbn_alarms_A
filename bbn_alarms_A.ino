@@ -85,7 +85,8 @@ void loop() {
       Serial.println(parsedRequest.headers);
 
       handle_OnConnect(&eth, connectionId);
-      delay(500);
+      delay(3000);
+
       eth.sendCMD("AT+CIPCLOSE=" + String(connectionId));
       delay(1000);
 
@@ -101,7 +102,7 @@ void loop() {
     auto resp = eth.createSSLClient("api.callmebot.com", 443);
     int idx = resp.indexOf("CONNECT");
     Serial.printf("idx %d\n", idx);
-    if (idx != -1 && idx > 1 && idx < 4) {
+    if (idx != -1 && idx > 1 && idx < 1024) {
       int connectionId = resp.charAt(idx - 2) - '0';  // Get the connection ID
       Serial.print("Established connection ID: ");
       Serial.println(connectionId);
@@ -112,7 +113,7 @@ void loop() {
       eth.sendCMD("AT+CIPSEND=" + String(connectionId) + "," + String(req.length()));
       delay(100);
       eth.sendCMD(req);
-      delay(500);
+      delay(5000);
       eth.sendCMD("AT+CIPCLOSE=" + String(connectionId));
       delay(1000);
     }

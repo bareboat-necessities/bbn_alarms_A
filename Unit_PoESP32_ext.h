@@ -6,8 +6,6 @@
    @copyright Copyright (c) 2025 by Bareboat Necessities
 
    @Links [Unit_PoESP32](https://docs.m5stack.com/en/unit/poesp32)
-   @version  V0.0.1
-   @date  2022-07-08
 */
 #ifndef _UNIT_POESP32_EXT_H_
 #define _UNIT_POESP32_EXT_H_

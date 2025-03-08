@@ -31,7 +31,7 @@ class Unit_PoESP32 {
     String createTCPClient(String ip, int port);
     String createSSLClient(String ip, int port);
     bool sendTCPData(int connectionId, uint8_t *buffer, size_t size);
-    bool Unit_PoESP32::sendTCPString(int connectionId, char* string);
+    bool sendTCPString(int connectionId, char* string);
 };
 
 /*! @brief Initialize the Unit PoESP32.*/
@@ -137,6 +137,9 @@ bool Unit_PoESP32::sendTCPData(int connectionId, uint8_t* buffer, size_t size) {
   return _readstr.indexOf("SEND OK") != -1;
 }
 
+
+/*! @brief send a string via TCP
+    @return True if send successfully, false otherwise. */
 bool Unit_PoESP32::sendTCPString(int connectionId, char* string) {
   return sendTCPData(connectionId, (uint8_t*) string, strlen(string));
 }

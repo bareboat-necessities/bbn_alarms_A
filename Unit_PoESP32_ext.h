@@ -3,6 +3,7 @@
 
    @brief An an ESP32 Ethernet Unit supports PoE From M5Stack
    @copyright Copyright (c) 2022 by M5Stack[https://m5stack.com]
+   @copyright Copyright (c) 2025 by Bareboat Necessities
 
    @Links [Unit_PoESP32](https://docs.m5stack.com/en/unit/poesp32)
    @version  V0.0.1

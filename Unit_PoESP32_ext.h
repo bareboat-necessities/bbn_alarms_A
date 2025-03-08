@@ -10,16 +10,9 @@
 */
 #ifndef _UNIT_POESP32_EXT_H_
 #define _UNIT_POESP32_EXT_H_
+
 #include <Arduino.h>
 #include "pins_arduino.h"
-
-typedef enum { HEAD = 1, GET, POST, PUT, DELETE } http_method_t;
-typedef enum {
-  APPLICATION_X_WWW_FORM_URLENCODED = 0,
-  APPLICATION_JSON,
-  MULTIPART_FORM_DATA,
-  TEXT_XML
-} http_content_t;
 
 class Unit_PoESP32 {
   private:
@@ -33,22 +26,12 @@ class Unit_PoESP32 {
     void sendCMD(String command);
     bool checkDeviceConnect();
     bool checkETHConnect();
-    bool checkMQTTConnect();
     String obtainLocalIP();
     String activateMUXMode();
     String activateTcpServerPort80();
     String createTCPClient(String ip, int port);
     String createSSLClient(String ip, int port);
     bool sendTCPData(uint8_t *buffer, size_t size);
-    bool createMQTTClient(String host = "host", String port = "port",
-                          String clientId  = "client id",
-                          String user_name = "user", String user_pwd = "pwd");
-    bool publicMQTTMsg(String topic, String payload, String qos = "0");
-    bool subscribeMQTTMsg(String topic, String qos = "0");
-    String createHTTPClient(
-      http_method_t method = GET,
-      http_content_t content_type = APPLICATION_X_WWW_FORM_URLENCODED,
-      String url = "", String payload = "");
 };
 
 /*! @brief Initialize the Unit PoESP32.*/
@@ -152,55 +135,6 @@ bool Unit_PoESP32::sendTCPData(uint8_t* buffer, size_t size) {
   _serial->print("");
   _readstr = waitMsg(500);
   return _readstr.indexOf("SEND OK") != -1;
-}
-
-/*! @brief Create a MQTT client
-    @return True if create successfully, false otherwise. */
-bool Unit_PoESP32::createMQTTClient(String host, String port, String clientId,
-                                    String user_name, String user_pwd) {
-  sendCMD("AT+MQTTCLEAN=0");
-  delay(500);
-  sendCMD("AT+MQTTUSERCFG=0,1,\"" + clientId + "\",\"" + user_name + "\",\"" +
-          user_pwd + "\",0,0,\"\"");
-  delay(500);
-  sendCMD("AT+MQTTCONN=0,\"" + host + "\"," + port + ",0");
-  _readstr = waitMsg(4000);
-  Serial.print(_readstr);
-  return _readstr.indexOf("+MQTTCONNECTED") != -1;
-}
-
-/*! @brief public a MQTT message
-    @return True if public successfully, false otherwise. */
-bool Unit_PoESP32::publicMQTTMsg(String topic, String payload, String qos) {
-  delay(500);
-  _readstr = waitMsg(500);
-  sendCMD("AT+MQTTPUB=0,\"" + topic + "\",\"" + payload + "\"," + qos + ",0");
-  return _readstr.indexOf("OK") != -1;
-}
-
-/*! @brief subscribe a MQTT message
-    @return True if subscribe successfully, false otherwise. */
-bool Unit_PoESP32::subscribeMQTTMsg(String topic, String qos) {
-  delay(500);
-  sendCMD("AT+MQTTSUB=0,\"" + topic + "\"," + qos + "");
-  _readstr = waitMsg(500);
-  return _readstr.indexOf("OK") != -1;
-}
-
-/*! @brief Create a HTTP client
-    @return True if create successfully, false otherwise. */
-String Unit_PoESP32::createHTTPClient(http_method_t method,
-                                      http_content_t content_type, String url,
-                                      String payload) {
-  if (payload != "") {
-    sendCMD("AT+HTTPCLIENT=" + String(method) + "," + String(content_type) +
-            ",\"" + url + "\",\"\",\"\",1,\"" + payload + "\"");
-  } else {
-    sendCMD("AT+HTTPCLIENT=" + String(method) + "," + String(content_type) +
-            ",\"" + url + "\",\"\",\"\",1");
-  }
-  _readstr = waitMsg(4000);
-  return _readstr;
 }
 
 #endif

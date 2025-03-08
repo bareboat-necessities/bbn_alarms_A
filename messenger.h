@@ -4,7 +4,7 @@
 #include <SSLClient.h>
 #include <UrlEncode.h>
 
-#define SERVER "api.callmebot.com"
+#define MESSENGER_SERVER "api.callmebot.com"
 
 // +international_country_code + phone number
 // Portugal +351, example: +351912345678

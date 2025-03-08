@@ -112,8 +112,10 @@ String Unit_PoESP32::activateTcpServerPort80() {
 /*! @brief Create a TCP client
     @return String. */
 String Unit_PoESP32::createTCPClient(String ip, int port) {
+  sendCMD("AT+CIPCLOSE");
+  delay(500);
   sendCMD("AT+CIPSTARTEX=\"TCP\",\"" + ip + "\"," + String(port));
-  _readstr = waitMsg(1000, "OK", "ERROR");
+  _readstr = waitMsg(5000);
   Serial.println(_readstr.c_str());
   return _readstr;
 }
@@ -121,8 +123,10 @@ String Unit_PoESP32::createTCPClient(String ip, int port) {
 /*! @brief Create a SSL client
     @return String. */
 String Unit_PoESP32::createSSLClient(String ip, int port) {
+  sendCMD("AT+CIPCLOSE");
+  delay(500);
   sendCMD("AT+CIPSTARTEX=\"SSL\",\"" + ip + "\"," + String(port));
-  _readstr = waitMsg(5000, "OK", "ERROR");
+  _readstr = waitMsg(5000);
   Serial.println(_readstr.c_str());
   return _readstr;
 }
@@ -131,7 +135,7 @@ String Unit_PoESP32::createSSLClient(String ip, int port) {
     @return True if send successfully, false otherwise. */
 bool Unit_PoESP32::sendTCPData(int connectionId, uint8_t* buffer, size_t size) {
   sendCMD("AT+CIPSEND=" + String(connectionId) + "," + String(size));
-  delay(20);
+  delay(100);
   _serial->write(buffer, size);
   _serial->print("");
   //_serial->flush();

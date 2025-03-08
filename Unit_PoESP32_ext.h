@@ -21,7 +21,7 @@ class Unit_PoESP32 {
   public:
     void Init(HardwareSerial *serial = &Serial2, unsigned long baud = 9600,
               uint8_t RX = G1, uint8_t TX = G2);
-    String waitMsg(unsigned long time);
+    String waitMsg(unsigned long time = 5, const char* expect_resp1 = NULL, const char* expect_resp2 = NULL);
     void sendCMD(String command);
     bool checkDeviceConnect();
     bool checkETHConnect();
@@ -43,13 +43,19 @@ void Unit_PoESP32::Init(HardwareSerial* serial, unsigned long baud, uint8_t RX,
 
 /*! @brief Waiting for a period of time to receive a message
     @return Received messages.. */
-String Unit_PoESP32::waitMsg(unsigned long time) {
+String Unit_PoESP32::waitMsg(unsigned long time, const char* expect_resp1, const char* expect_resp2) {
   String restr;
   unsigned long start = millis();
   while (1) {
     if (_serial->available() > 0) {
       String str = _serial->readString();
       restr += str;
+    }
+    if (expect_resp1 != NULL && restr.indexOf(expect_resp1) != -1) {
+      break;
+    }
+    if (expect_resp2 != NULL && restr.indexOf(expect_resp2) != -1) {
+      break;
     }
     if ((millis() - start) > time) {
       break;
@@ -67,7 +73,7 @@ void Unit_PoESP32::sendCMD(String command) {
     @return True if good connection, false otherwise. */
 bool Unit_PoESP32::checkDeviceConnect() {
   sendCMD("AT");
-  _readstr = waitMsg(1000);
+  _readstr = waitMsg(1000, "OK", "ERROR");
   return _readstr.indexOf("OK") != -1;
 }
 
@@ -75,7 +81,7 @@ bool Unit_PoESP32::checkDeviceConnect() {
     @return True if good connection, false otherwise. */
 bool Unit_PoESP32::checkETHConnect() {
   sendCMD("AT+CIPETH?");
-  _readstr = waitMsg(1000);
+  _readstr = waitMsg(1000, "192", "ERROR");
   //Serial.println(_readstr.c_str());
   return _readstr.indexOf("192") != -1;
 }
@@ -84,7 +90,7 @@ bool Unit_PoESP32::checkETHConnect() {
     @return String. */
 String Unit_PoESP32::obtainLocalIP() {
   sendCMD("AT+CIFSR");
-  _readstr = waitMsg(1000);
+  _readstr = waitMsg(1000, "192", "ERROR");
   return _readstr;
 }
 
@@ -92,7 +98,7 @@ String Unit_PoESP32::obtainLocalIP() {
     @return String. */
 String Unit_PoESP32::activateMUXMode() {
   sendCMD("AT+CIPMUX=1");
-  _readstr = waitMsg(1000);
+  _readstr = waitMsg(1000, "OK", "ERROR");
   return _readstr;
 }
 
@@ -100,7 +106,7 @@ String Unit_PoESP32::activateMUXMode() {
     @return String. */
 String Unit_PoESP32::activateTcpServerPort80() {
   sendCMD("AT+CIPSERVER=1,80");
-  _readstr = waitMsg(1000);
+  _readstr = waitMsg(1000, "OK", "ERROR");
   return _readstr;
 }
 
@@ -110,7 +116,7 @@ String Unit_PoESP32::createTCPClient(String ip, int port) {
   sendCMD("AT+CIPCLOSE");
   delay(500);
   sendCMD("AT+CIPSTARTEX=\"TCP\",\"" + ip + "\"," + String(port));
-  _readstr = waitMsg(1000);
+  _readstr = waitMsg(1000, "OK", "ERROR");
   Serial.println(_readstr.c_str());
   return _readstr;
 }
@@ -121,7 +127,7 @@ String Unit_PoESP32::createSSLClient(String ip, int port) {
   sendCMD("AT+CIPCLOSE");
   delay(500);
   sendCMD("AT+CIPSTARTEX=\"SSL\",\"" + ip + "\"," + String(port));
-  _readstr = waitMsg(5000);
+  _readstr = waitMsg(5000, "OK", "ERROR");
   Serial.println(_readstr.c_str());
   return _readstr;
 }
@@ -133,8 +139,8 @@ bool Unit_PoESP32::sendTCPData(int connectionId, uint8_t* buffer, size_t size) {
   delay(100);
   _serial->write(buffer, size);
   _serial->print("");
-  _readstr = waitMsg(500);
-  return _readstr.indexOf("SEND OK") != -1;
+  _readstr = waitMsg(500, "OK", "ERROR");
+  return _readstr.indexOf("OK") != -1;
 }
 
 /*! @brief send a string via TCP

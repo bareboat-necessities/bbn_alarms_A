@@ -1,6 +1,8 @@
 #ifndef web_server_h
 #define web_server_h
 
+#include "Unit_PoESP32_ext.h"
+
 const char style[] PROGMEM = R"=====(
 body {
   font-family: Arial, sans-serif;
@@ -80,7 +82,7 @@ const char form[] PROGMEM = R"=====(
 </form>
 )=====";
 
-const char settings_page[] PROGMEM = R"=====(
+const char settings_page_head[] PROGMEM = R"=====(
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -88,49 +90,56 @@ const char settings_page[] PROGMEM = R"=====(
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WhatsApp API Configuration</title>
   <style>
-%s
+)=====";
+
+const char settings_page_body[] PROGMEM = R"=====(
   </style>
 </head>
 <body>
 <div class="form-container">
   <h1>WhatsApp API Configuration</h1>
-%s
+)=====";
+
+const char settings_page_tail[] PROGMEM = R"=====(
 </div>
 </body>
 </html>
 )=====";
 
-void begin_response(EthernetClient client, int request_status = 200) {
-  client.println("HTTP/1.1 " + String(request_status) + (request_status == 200 ? String(" OK") : String(" Not Found")));
-  client.println("Content-Type: text/html");
-  client.println("Connection: close");  // the connection will be closed after completion of the response
+void begin_response(Unit_PoESP32 *client, int connectionId, int request_status = 200) {
+  client->sendTCPString(connectionId, (String("HTTP/1.1 ") + String(request_status) + (request_status == 200 ? String(" OK\r\n") : String(" Not Found\r\n"))).c_str());
+  client->sendTCPString(connectionId, "Content-Type: text/html\r\n");
+  client->sendTCPString(connectionId, "Connection: close\r\n");  // the connection will be closed after completion of the response
 }
 
-void main_page(EthernetClient client, int request_status = 200) {
-  begin_response(client, request_status);
-  client.printf(settings_page, style, form);
-  client.println();
+void main_page(Unit_PoESP32 *client, int connectionId, int request_status = 200) {
+  begin_response(client, connectionId, request_status);
+  client->sendTCPString(connectionId, settings_page_head);
+  client->sendTCPString(connectionId, style);
+  client->sendTCPString(connectionId, settings_page_body);
+  client->sendTCPString(connectionId, form);
+  client->sendTCPString(connectionId, settings_page_tail);
 }
 
-void error_page(EthernetClient client, int request_status = 200) {
-  begin_response(client, request_status);
+void error_page(Unit_PoESP32 *client, int connectionId, int request_status = 200) {
+  begin_response(client, connectionId, request_status);
 }
 
-void handle_OnConnect(EthernetClient client) {
-  main_page(client);
+void handle_OnConnect(Unit_PoESP32 *client, int connectionId) {
+  Serial.println("Main Page!");
+  main_page(client, connectionId);
   Serial.println("Connection!");
 }
 
-void handle_OnSettings(EthernetClient client) {
+void handle_OnSettings(Unit_PoESP32 *client, int connectionId) {
   //client.println(html_response);
   Serial.println("Settings!");
 }
 
-void handle_NotFound(EthernetClient client, String url) {
-  error_page(client, 400);
-  client.println("<a>The path " + url + " doesn't exist</a>");
+void handle_NotFound(Unit_PoESP32 *client, int connectionId, String url) {
+  error_page(client, connectionId, 400);
+  client->sendTCPString(connectionId, String("<a>The path " + url + " doesn't exist</a>\n").c_str());
   Serial.println("Error, unrecognised path");
 }
 
 #endif
-

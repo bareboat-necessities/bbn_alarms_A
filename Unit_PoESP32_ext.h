@@ -30,7 +30,7 @@ class Unit_PoESP32 {
     String activateTcpServerPort80();
     String createTCPClient(String ip, int port);
     String createSSLClient(String ip, int port);
-    bool sendTCPData(uint8_t *buffer, size_t size);
+    bool sendTCPData(int connectionId, uint8_t *buffer, size_t size);
 };
 
 /*! @brief Initialize the Unit PoESP32.*/
@@ -127,9 +127,9 @@ String Unit_PoESP32::createSSLClient(String ip, int port) {
 
 /*! @brief send a TCP data
     @return True if send successfully, false otherwise. */
-bool Unit_PoESP32::sendTCPData(uint8_t* buffer, size_t size) {
-  sendCMD("AT+CIPSEND=" + String(size) + "");
-  delay(500);
+bool Unit_PoESP32::sendTCPData(int connectionId, uint8_t* buffer, size_t size) {
+  sendCMD("AT+CIPSEND=" + String(connectionId) + "," + String(size));
+  delay(100);
   _serial->write(buffer, size);
   _serial->print("");
   _readstr = waitMsg(500);

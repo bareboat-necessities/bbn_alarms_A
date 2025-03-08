@@ -4,8 +4,6 @@
 #include <SSLClient.h>
 #include <UrlEncode.h>
 
-#include "trust_anchors.h"
-
 #define SERVER "api.callmebot.com"
 
 // +international_country_code + phone number

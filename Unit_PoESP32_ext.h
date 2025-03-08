@@ -112,8 +112,8 @@ String Unit_PoESP32::activateTcpServerPort80() {
 /*! @brief Create a TCP client
     @return String. */
 String Unit_PoESP32::createTCPClient(String ip, int port) {
-  sendCMD("AT+CIPCLOSE");
-  delay(500);
+  //sendCMD("AT+CIPCLOSE");
+  //delay(500);
   sendCMD("AT+CIPSTARTEX=\"TCP\",\"" + ip + "\"," + String(port));
   _readstr = waitMsg(5000, "CONNECT");
   Serial.println(_readstr.c_str());
@@ -123,8 +123,8 @@ String Unit_PoESP32::createTCPClient(String ip, int port) {
 /*! @brief Create a SSL client
     @return String. */
 String Unit_PoESP32::createSSLClient(String ip, int port) {
-  sendCMD("AT+CIPCLOSE");
-  delay(500);
+  //sendCMD("AT+CIPCLOSE");
+  //delay(500);
   sendCMD("AT+CIPSTARTEX=\"SSL\",\"" + ip + "\"," + String(port));
   _readstr = waitMsg(5000, "CONNECT");
   Serial.println(_readstr.c_str());

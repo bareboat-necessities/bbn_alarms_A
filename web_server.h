@@ -107,9 +107,10 @@ const char settings_page_tail[] PROGMEM = R"=====(
 )=====";
 
 void begin_response(Unit_PoESP32 *client, int connectionId, int request_status = 200) {
-  client->sendTCPString(connectionId, (String("HTTP/1.1 ") + String(request_status) + (request_status == 200 ? String(" OK\n") : String(" Not Found\n"))).c_str());
-  client->sendTCPString(connectionId, "Content-Type: text/html\n");
-  client->sendTCPString(connectionId, "Connection: close\n\n");  // the connection will be closed after completion of the response
+  client->sendTCPString(connectionId, 
+    (String("HTTP/1.1 ") + String(request_status) + (request_status == 200 ? String(" OK\n") : String(" Not Found\n")) +
+     "Content-Type: text/html\nConnection: close\n\n"
+    ).c_str());
 }
 
 void main_page(Unit_PoESP32 *client, int connectionId, int request_status = 200) {

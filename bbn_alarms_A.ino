@@ -13,38 +13,12 @@
 #include "conf_store.h"
 #include "sleep_n_wakeup.h"
 #include "messenger.h"
-//#include "web_server.h"
+#include "http_parsing.h"
+#include "web_server.h"
 //#include "i2c_ads1115.h"
 //#include "gpio_jsn_sr04t.h"
 
 Unit_PoESP32 eth;
-
-// M5AtomS3Lite
-//#define SCK  G5
-//#define MISO G7
-//#define MOSI G8
-//#define CS   G6
-
-// M5AtomLite
-//#define SCK  G22
-//#define MISO G23
-//#define MOSI G33
-//#define CS   G19
-
-byte mac[] = {0xDE, 0xAD, 0xBE, 0xDE, 0xCA, 0xDE};  // Host name will be WIZnetDECADE on local LAN (WIZnet + 3 last MAC octets)
-
-//EthernetServer server(80);
-
-// Choose the analog pin to get semi-random data from for SSL
-// Pick a pin that's not connected or attached to a randomish voltage source
-const int rand_pin = G2; // G34 /* atom-lite */;
-
-// Initialize the SSL client library
-// We input an EthernetClient, our trust anchors, and the analog pin
-//EthernetClient base_client;
-//SSLClient ssl_client(base_client, TAs, (size_t)TAs_NUM, rand_pin);
-
-//unsigned long byteCount = 0;
 
 void setup() {
   auto cfg = M5.config();
@@ -52,7 +26,6 @@ void setup() {
   Serial.begin(115200);
 
   Serial.println("device connecting");
-  //Serial2.begin(9600, SERIAL_8N1, G6, G5);
   eth.Init(&Serial2, 9600, G1, G2);
   Serial.println("wait device connect");
   while (!eth.checkDeviceConnect()) {
@@ -60,9 +33,9 @@ void setup() {
   }
   Serial.println("device connected");
 
-  eth.sendCMD("AT+CWDHCP=1,1");
-  auto dhcpSetResponse = eth.waitMsg(1000);
-  Serial.println(dhcpSetResponse.c_str());
+  //eth.sendCMD("AT+CWDHCP=1,1");
+  //auto dhcpSetResponse = eth.waitMsg(1000);
+  //Serial.println(dhcpSetResponse.c_str());
 
   Serial.println("wait ethernet connect");
   while (!eth.checkETHConnect()) {
@@ -78,50 +51,7 @@ void setup() {
 
   auto servActivationResponse = eth.activateTcpServerPort80();
   Serial.println(servActivationResponse.c_str());
-
-  /*
-
-
-    Serial.println("Initializing SPI...");
-    SPI.begin(SCK, MISO, MOSI, -1);
-    Serial.println("Initializing ethernet...");
-    Ethernet.init(CS);
-
-    while (Ethernet.begin(mac) != 1) {
-    Serial.println("Error getting IP address via DHCP, trying again...");
-    delay(2000);
-    }
-
-    // Check for Ethernet hardware present
-    if (Ethernet.hardwareStatus() == EthernetNoHardware) {
-    Serial.println(
-      "Ethernet shield was not found.  Sorry, can't run without hardware. :(");
-    while (true) {
-      delay(1);  // do nothing, no point running without Ethernet hardware
-    }
-    }
-    if (Ethernet.linkStatus() == LinkOFF) {
-    Serial.println("Ethernet cable is not connected.");
-    }
-
-    Serial.print("Local IP : ");
-    Serial.println(Ethernet.localIP());
-    Serial.print("Subnet Mask : ");
-    Serial.println(Ethernet.subnetMask());
-    Serial.print("Gateway IP : ");
-    Serial.println(Ethernet.gatewayIP());
-    Serial.print("DNS Server : ");
-    Serial.println(Ethernet.dnsServerIP());
-
-    Serial.println("Ethernet Successfully Initialized");
-
-    // start the server
-    server.begin();
-    Serial.print("Server is at http://");
-    Serial.println(Ethernet.localIP());
-  */
 }
-
 
 void loop() {
   M5.update();
@@ -132,22 +62,38 @@ void loop() {
     Serial.println(response);
 
     // Check if a new client has connected
-    int idx = response.substring(0, 10).indexOf("+IPD");
-    if (idx != -1 && idx < 4) {
+    int idx = response.indexOf("+IPD");
+    Serial.printf("idx %d\n", idx);
+    if (idx != -1 && idx < 1024) {
       // Extract the connection ID and data
       int connectionId = response.charAt(5 + idx) - '0';  // Get the connection ID
-      String data = response.substring(7 + idx);  // Get the data
+      String httpRequest = response.substring(7 + idx);  // Get the data
 
       Serial.print("Received data from connection ID: ");
       Serial.println(connectionId);
       Serial.print("Data: ");
-      Serial.println(data);
+      Serial.println(httpRequest);
+
+      HttpRequest parsedRequest = parseHttpRequest(httpRequest);
+
+      // Print the parsed request
+      Serial.println("Method: " + parsedRequest.method);
+      Serial.println("Path: " + parsedRequest.path);
+      Serial.println("Query String: " + parsedRequest.queryString);
+      Serial.println("Query Arguments:");
+      for (int i = 0; i < parsedRequest.queryArgCount; i++) {
+        Serial.println("  " + parsedRequest.queryArgs[i].key + " = " + parsedRequest.queryArgs[i].value);
+      }
+      Serial.println("Headers:");
+      Serial.println(parsedRequest.headers);
+
+      handle_OnConnect(&eth, connectionId);
 
       // Send a response back to the client
-      String responseMessage = "Hello from M5Stack TCP Server!\n";
-      eth.sendCMD("AT+CIPSEND=" + String(connectionId) + "," + String(responseMessage.length()));
-      delay(100);
-      eth.sendCMD(responseMessage);
+      //String responseMessage = "Hello from M5Stack TCP Server!\n";
+      //eth.sendCMD("AT+CIPSEND=" + String(connectionId) + "," + String(responseMessage.length()));
+      //delay(100);
+      //eth.sendCMD(responseMessage);
     }
   }
   if (M5.BtnA.wasPressed()) {
@@ -156,11 +102,11 @@ void loop() {
     auto resp = eth.createSSLClient("api.callmebot.com", 443);
     int idx = resp.indexOf("CONNECT");
     Serial.printf("idx %d\n", idx);
-    if (idx != -1 && idx > 1 && idx < 1024) {
+    if (idx != -1 && idx > 1 && idx < 4) {
       int connectionId = resp.charAt(idx - 2) - '0';  // Get the connection ID
       Serial.print("Established connection ID: ");
       Serial.println(connectionId);
-
+      
       String message = "Hello from esp32!";
       String req = String("GET ") + "/whatsapp.php?phone=" + phoneNumber
                    + "&apikey=" + apiKey + "&text=" + urlEncode(message) + " HTTP/1.1\nHost: api.callmebot.com\nConnection: close\n\n";
@@ -216,43 +162,5 @@ void loop() {
       client.stop();
     }
 
-    if (M5.BtnA.wasPressed()) {
-      Serial.println("BtnA.wasPressed");
-      if (ssl_client.connect(SERVER, 443)) {
-        Serial.print("connected to ");
-        // Make a HTTP request:
-        ssl_client.println(String("GET ") + "/whatsapp.php?phone=" + phoneNumber + "&apikey=" + apiKey + "&text=" + urlEncode(message) + " HTTP/1.1");
-        ssl_client.println("Host: api.callmebot.com");
-        ssl_client.println("Connection: close");
-        ssl_client.println();
-      } else {
-        // if you didn't get a connection to the server:
-        Serial.println("connection failed");
-      }
-    }
-
-    if (ssl_client.connected()) {
-      // if there are incoming bytes available
-      // from the server, read them and print them:
-      int len;
-      while (len = ssl_client.available()) {
-        if (len > 0) {
-          byte buffer[80];
-          if (len > 80) len = 80;
-          ssl_client.read(buffer, len);
-          byteCount = byteCount + len;
-        }
-        delay(1);
-      }
-    }
-
-    // server's disconnected
-    if (!ssl_client.connected() && byteCount > 0) {
-      Serial.println("disconnecting.");
-      //ssl_client.stop();
-      Serial.print("Received ");
-      Serial.print(byteCount);
-      byteCount = 0;
-    }
   */
 }

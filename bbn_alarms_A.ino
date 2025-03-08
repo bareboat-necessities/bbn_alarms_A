@@ -33,10 +33,6 @@ void setup() {
   }
   Serial.println("device connected");
 
-  //eth.sendCMD("AT+CWDHCP=1,1");
-  //auto dhcpSetResponse = eth.waitMsg(1000);
-  //Serial.println(dhcpSetResponse.c_str());
-
   Serial.println("wait ethernet connect");
   while (!eth.checkETHConnect()) {
     delay(10);
@@ -58,7 +54,7 @@ void loop() {
   M5.update();
 
   // Check for incoming data from the Ethernet unit
-  if (Serial2.available() > 6) {
+  if (Serial2.available() > 4) {
     String response = eth.waitMsg(200, NULL, NULL);
     Serial.println(response);
 
@@ -89,6 +85,9 @@ void loop() {
       Serial.println(parsedRequest.headers);
 
       handle_OnConnect(&eth, connectionId);
+      delay(500);
+      eth.sendCMD("AT+CIPCLOSE=" + String(connectionId));
+      delay(1000);
 
       // Send a response back to the client
       //String responseMessage = "Hello from M5Stack TCP Server!\n";
@@ -99,7 +98,6 @@ void loop() {
   }
   if (M5.BtnA.wasPressed()) {
     Serial.println("BtnA.wasPressed");
-    //eth.createSSLClient("example.com", 443);
     auto resp = eth.createSSLClient("api.callmebot.com", 443);
     int idx = resp.indexOf("CONNECT");
     Serial.printf("idx %d\n", idx);
@@ -114,6 +112,9 @@ void loop() {
       eth.sendCMD("AT+CIPSEND=" + String(connectionId) + "," + String(req.length()));
       delay(100);
       eth.sendCMD(req);
+      delay(500);
+      eth.sendCMD("AT+CIPCLOSE=" + String(connectionId));
+      delay(1000);
     }
   }
   //  app.tick();

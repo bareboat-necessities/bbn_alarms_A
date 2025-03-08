@@ -42,7 +42,9 @@ void setup() {
   auto localInfo = eth.obtainLocalIP();
   Serial.println(localInfo.c_str());
 
-  delay(1000);
+  eth.sendCMD("AT+CIPMODE=0");
+  eth.waitMsg(100, "OK");
+   
   auto muxResponse = eth.activateMUXMode();
   Serial.println(muxResponse.c_str());
 
@@ -56,7 +58,7 @@ void loop() {
 
   // Check for incoming data from the Ethernet unit
   if (Serial2.available() > 4) {
-    String response = eth.waitMsg(200, "Connection:", NULL);
+    String response = eth.waitMsg(200, "Connection:");
     Serial.println(response);
 
     // Check if a new client has connected

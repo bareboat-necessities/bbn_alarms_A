@@ -103,7 +103,7 @@ void loop() {
   }
   if (M5.BtnA.wasPressed()) {
     Serial.println("BtnA.wasPressed");
-    auto resp = eth.createSSLClient("api.callmebot.com", 443);
+    auto resp = eth.createSSLClient(MESSENGER_SERVER, 443);
     int idx = resp.indexOf("CONNECT");
     Serial.printf("idx %d\n", idx);
     if (idx != -1 && idx > 1 && idx < 1024) {

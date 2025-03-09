@@ -6,8 +6,8 @@
 #include <SPI.h>
 #include <ReactESP.h>  // https://github.com/mairas/ReactESP
 
-//using namespace reactesp;
-//ReactESP app;
+using namespace reactesp;
+ReactESP app;
 
 #include "Unit_PoESP32_ext.h"
 #include "conf_store.h"
@@ -15,8 +15,8 @@
 #include "messenger.h"
 #include "http_parsing.h"
 #include "web_server.h"
-//#include "i2c_ads1115.h"
-//#include "gpio_jsn_sr04t.h"
+#include "i2c_ads1115.h"
+#include "gpio_jsn_sr04t.h"
 
 Unit_PoESP32 eth;
 
@@ -42,6 +42,9 @@ void setup() {
   auto localInfo = eth.obtainLocalIP();
   Serial.println(localInfo.c_str());
 
+  eth.sendCMD("AT+CIPSERVER=0,1"); // shutdown server and close connections
+  eth.waitMsg(100, "OK", "ERROR");
+  
   eth.sendCMD("AT+CIPMODE=0");
   eth.waitMsg(100, "OK");
    
@@ -54,7 +57,7 @@ void setup() {
 
 void loop() {
   M5.update();
-  // app.tick();
+  app.tick();
 
   // Check for incoming data from the Ethernet unit
   if (Serial2.available() > 4) {

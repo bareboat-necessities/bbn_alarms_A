@@ -19,8 +19,8 @@ class Unit_PoESP32 {
     String _readstr;
 
   public:
-    void Init(HardwareSerial *serial = &Serial2, unsigned long baud = 9600,
-              uint8_t RX = G1, uint8_t TX = G2);
+    void initETH(HardwareSerial *serial = &Serial2, unsigned long baud = 9600,
+              uint8_t rx = G1, uint8_t tx = G2);
     String waitMsg(unsigned long time = 5, const char* expect_resp1 = NULL, const char* expect_resp2 = NULL);
     void sendCMD(String command);
     bool checkDeviceConnect();
@@ -35,9 +35,9 @@ class Unit_PoESP32 {
 };
 
 /*! @brief Initialize the Unit PoESP32.*/
-void Unit_PoESP32::Init(HardwareSerial* serial, unsigned long baud, uint8_t RX, uint8_t TX) {
+void Unit_PoESP32::initETH(HardwareSerial* serial, unsigned long baud, uint8_t rx, uint8_t tx) {
   _serial = serial;
-  _serial->begin(baud, SERIAL_8N1, RX, TX);
+  _serial->begin(baud, SERIAL_8N1, rx, tx);
 }
 
 /*! @brief Waiting for a period of time to receive a message
@@ -59,6 +59,7 @@ String Unit_PoESP32::waitMsg(unsigned long time, const char* expect_resp1, const
     if ((millis() - start) > time) {
       break;
     }
+    delay(4);
   }
   return restr;
 }

@@ -135,7 +135,7 @@ String Unit_PoESP32::createTCPClient(String ip, int port) {
   //delay(500);
   sendCMD("AT+CIPSTARTEX=\"TCP\",\"" + ip + "\"," + String(port));
   _readstr = waitMsg(5000, "CONNECT");
-  Serial.println(_readstr.c_str());
+  //Serial.println(_readstr.c_str());
   return _readstr;
 }
 
@@ -146,7 +146,7 @@ String Unit_PoESP32::createSSLClient(String ip, int port) {
   //delay(500);
   sendCMD("AT+CIPSTARTEX=\"SSL\",\"" + ip + "\"," + String(port));
   _readstr = waitMsg(5000, "CONNECT");
-  Serial.println(_readstr.c_str());
+  //Serial.println(_readstr.c_str());
   return _readstr;
 }
 
@@ -159,7 +159,7 @@ bool Unit_PoESP32::sendTCPData(int connectionId, uint8_t* buffer, size_t size) {
   _serial->print("");
   //_serial->flush();
   _readstr = waitMsg(500, "SEND");
-  Serial.println(_readstr.c_str());
+  //Serial.println(_readstr.c_str());
   return _readstr.indexOf("SEND OK") != -1;
 }
 

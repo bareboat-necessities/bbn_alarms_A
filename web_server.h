@@ -112,24 +112,29 @@ const char settings_page_tail[] PROGMEM = R"=====(
 </html>
 )=====";
 
+String build_begin_response(Unit_PoESP32 *client, int connectionId, int request_status = 200) {
+  return (String("HTTP/1.1 ") + String(request_status) + (request_status == 200 ? String(" OK\n") : String(" Not Found\n")) +
+     "Content-Type: text/html\nConnection: close\n\n");
+}
+
 void begin_response(Unit_PoESP32 *client, int connectionId, int request_status = 200) {
   client->sendTCPString(connectionId, 
-    (String("HTTP/1.1 ") + String(request_status) + (request_status == 200 ? String(" OK\n") : String(" Not Found\n")) +
-     "Content-Type: text/html\nConnection: close\n\n"
-    ).c_str());
+    build_begin_response(client, connectionId, request_status).c_str());
 }
 
 void main_page(Unit_PoESP32 *client, int connectionId, bool stored, int request_status = 200) {
-  begin_response(client, connectionId, request_status);
-  client->sendTCPString(connectionId, settings_page_head);
-  client->sendTCPString(connectionId, style);
-  client->sendTCPString(connectionId, settings_page_body);
+  String response;
+  response += build_begin_response(client, connectionId, request_status);
+  response += String(settings_page_head);
+  response += String(style);
+  response += String(settings_page_body);
   if (stored) {
-    client->sendTCPString(connectionId, conf_stored);
+    response += String(conf_stored);
   } else {
-    client->sendTCPString(connectionId, form);
+    response += String(form);
   }
-  client->sendTCPString(connectionId, settings_page_tail);
+  response += String(settings_page_tail);
+  client->sendTCPString(connectionId, response.c_str(), response.length());
 }
 
 void error_page(Unit_PoESP32 *client, int connectionId, int request_status = 200) {

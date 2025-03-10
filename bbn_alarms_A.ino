@@ -27,9 +27,10 @@ void setup() {
   M5.begin(cfg);
   Serial.begin(115200);
 
+  gen_nmea0183_msg("$BBTXT,01,01,01,FirmwareTag: %s", firmware_tag);
+  
   eth.initETH(&Serial2, 9600, G1, G2);
 
-  gen_nmea0183_msg("$BBTXT,01,01,01,FirmwareTag: %s", firmware_tag);
   gen_nmea0183_txt("Waiting for ethernet device connected");
   while (!eth.checkDeviceConnect()) {
     delay(10);
@@ -98,6 +99,6 @@ void loop() {
   if (M5.BtnA.wasPressed()) {
     Serial.println("BtnA.wasPressed");
     String message = "Hello from esp32!";
-    messenger_send(&eth, message);
+    messenger_send(&eth, phoneNumber, apiKey, message);
   }
 }

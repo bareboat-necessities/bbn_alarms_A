@@ -106,6 +106,8 @@ String Unit_PoESP32::obtainLocalIP() {
   return _readstr;
 }
 
+/*! @brief Get Local IP Address
+    @return String. */
 String Unit_PoESP32::getLocalIP() {
   return _localIP;
 }

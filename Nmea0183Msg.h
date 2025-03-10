@@ -27,4 +27,8 @@ void gen_nmea0183_msg(const char *nmea_fmt, const char *value) {
   Serial.printf("%s*%02X\r\n", nmea_part, checksum);
 }
 
+void gen_nmea0183_txt(const char *message) {
+  gen_nmea0183_msg("%s", message);
+}
+
 #endif

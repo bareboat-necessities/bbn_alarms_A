@@ -44,9 +44,12 @@ void setup() {
       gen_nmea0183_txt("Waiting for ethernet connected");
       ethUp = eth.checkETHConnect();
       if (ethUp) {
-        auto IP = eth.getLocalIP();
-        if (IP.length() > 0) {
-          gen_nmea0183_msg("LocalIP: %s", IP.c_str());
+        auto localInfo = eth.obtainLocalIP();
+        if (localInfo.length() > 0) {
+          auto IP = eth.getLocalIP();
+          if (IP.length() > 0) {
+            gen_nmea0183_msg("LocalIP: %s", IP.c_str());
+          }
         }
       }
     }

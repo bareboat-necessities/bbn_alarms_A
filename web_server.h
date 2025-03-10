@@ -134,7 +134,7 @@ void main_page(Unit_PoESP32 *client, int connectionId, bool stored, int request_
     response += String(form);
   }
   response += String(settings_page_tail);
-  client->sendTCPString(connectionId, response.c_str(), response.length());
+  client->sendTCPString(connectionId, response.c_str());
 }
 
 void error_page(Unit_PoESP32 *client, int connectionId, int request_status = 200) {

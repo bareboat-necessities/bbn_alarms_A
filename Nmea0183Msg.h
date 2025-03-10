@@ -28,7 +28,7 @@ void gen_nmea0183_msg(const char *nmea_fmt, const char *value) {
 }
 
 void gen_nmea0183_txt(const char *message) {
-  gen_nmea0183_msg("%s", message);
+  gen_nmea0183_msg("$BBTXT,01,01,01,%s", message);
 }
 
 #endif

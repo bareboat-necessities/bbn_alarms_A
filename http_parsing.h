@@ -1,9 +1,9 @@
 #ifndef http_parsing_h
 #define http_parsing_h
 
-/* 
- *  Rudimentary GET request parser for HTTP (AI generated but should do it)
- */
+/*
+    Rudimentary GET request parser for HTTP (AI generated but should do it)
+*/
 
 // Define a structure to hold a key-value pair
 struct KeyValuePair {
@@ -85,6 +85,19 @@ HttpRequest parseHttpRequest(String request) {
   httpRequest.headers = request.substring(firstLineEnd + 2);
 
   return httpRequest;
+}
+
+void log_http_request(HttpRequest& parsedRequest) {
+  // Print the parsed request
+  Serial.println("Method: " + parsedRequest.method);
+  Serial.println("Path: " + parsedRequest.path);
+  Serial.println("Query String: " + parsedRequest.queryString);
+  Serial.println("Query Arguments:");
+  for (int i = 0; i < parsedRequest.queryArgCount; i++) {
+    Serial.println("  " + parsedRequest.queryArgs[i].key + " = " + parsedRequest.queryArgs[i].value);
+  }
+  Serial.println("Headers:");
+  Serial.println(parsedRequest.headers);
 }
 
 #endif

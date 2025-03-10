@@ -157,7 +157,7 @@ bool Unit_PoESP32::sendTCPData(int connectionId, uint8_t* buffer, size_t size) {
   _serial->write(buffer, size);
   _serial->print("");
   //_serial->flush();
-  _readstr = waitMsg(500, "SEND");
+  _readstr = waitMsg(10000, "SEND");
   //Serial.println(_readstr.c_str());
   return _readstr.indexOf("SEND OK") != -1;
 }

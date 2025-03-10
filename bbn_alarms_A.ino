@@ -45,6 +45,8 @@ void setup() {
   gen_nmea0183_msg("$BBTXT,01,01,01,FirmwareTag: %s", firmware_tag);
 
   restore_settings();
+  gen_nmea0183_msg("$BBTXT,01,01,01,Loaded settings. %s",
+                   (String("phone:") + phoneNumber + String(" apiKey:") + apiKey));
 
   eth.initETH(&Serial2, 9600, G1, G2);
 
@@ -126,12 +128,14 @@ void loop() {
             }
           }
           save_settings(phoneNumber, apiKey);
+          gen_nmea0183_msg("$BBTXT,01,01,01,Stored settings. %s",
+                           (String("phone:") + phoneNumber + String(" apiKey:") + apiKey));
           handle_OnSettings(&eth, connectionId);
         } else {
           handle_OnConnect(&eth, connectionId);
           delay(500);
         }
-        
+
         eth.sendCMD("AT+CIPCLOSE=" + String(connectionId));
         delay(1000);
       }

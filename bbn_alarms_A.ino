@@ -32,6 +32,11 @@ void reportIpAddress() {
   }
 }
 
+void mcu_sensors_scan() {
+  i2c_ads1115_try_init(&Wire1, G38, G39, 100000UL);
+  gpio_jsn_sr04t_try_init();
+}
+
 void setup() {
   auto cfg = M5.config();
   M5.begin(cfg);
@@ -40,6 +45,8 @@ void setup() {
   gen_nmea0183_msg("$BBTXT,01,01,01,FirmwareTag: %s", firmware_tag);
 
   eth.initETH(&Serial2, 9600, G1, G2);
+
+  mcu_sensors_scan();
 
   gen_nmea0183_txt("Waiting for ethernet device connected");
   while (!eth.checkDeviceConnect()) {
@@ -70,12 +77,8 @@ void setup() {
       eth.waitMsg(100, "OK");
 
       auto muxResponse = eth.activateMUXMode();
-      Serial.println(muxResponse.c_str());
-
       auto servActivationResponse = eth.activateTcpServerPort80();
-      Serial.println(servActivationResponse.c_str());
-
-      webServerUp = true;
+      webServerUp = servActivationResponse.indexOf("OK") != -1;
     }
   });
 
@@ -101,7 +104,7 @@ void loop() {
     if (idx != -1 && idx < 1024) {
       // Extract the connection ID and data
       int connectionId = response.charAt(5 + idx) - '0';  // Get the connection ID
-      String httpRequest = response.substring(7 + idx);  // Get the data
+      String httpRequest = response.substring(7 + idx);   // Get the data
 
       int idx2 = httpRequest.indexOf(":");
       if (idx2 != -1) {

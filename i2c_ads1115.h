@@ -57,7 +57,7 @@ bool i2c_ads1115_try_init(TwoWire *wire = &Wire, uint8_t sda = SDA, uint8_t scl 
     // | PGA_2048 |        32            |
     // | PGA_512  |        16            |
     // | PGA_256  |        8             |
-    app.onRepeat(2000, [i2c_ads1115_sensor]() {
+    app.onRepeat(3000, [i2c_ads1115_sensor]() {
       i2c_ads1115_report(i2c_ads1115_sensor);
     });
   }

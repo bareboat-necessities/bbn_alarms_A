@@ -25,9 +25,8 @@ void messenger_send(Unit_PoESP32 *eth, String phoneNumber, String apiKey, String
     String req = String("GET ") + "/whatsapp.php?phone=" + phoneNumber
                  + "&apikey=" + apiKey + "&text=" + urlEncode(message) + " HTTP/1.1\r\nHost: " + MESSENGER_SERVER 
                  + "\r\nConnection: close\r\n\r\n";
-    eth->sendCMD("AT+CIPSEND=" + String(connectionId) + "," + String(req.length()));
-    delay(100);
-    eth->sendCMD(req);
+    
+    eth->sendTCPString(connectionId, req.c_str());
     delay(2000);
   }
 }

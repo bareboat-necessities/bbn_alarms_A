@@ -10,9 +10,9 @@ using namespace reactesp;
 ReactESP app;
 
 #include "Unit_PoESP32_ext.h"
+#include "messenger.h"
 #include "conf_store.h"
 #include "sleep_n_wakeup.h"
-#include "messenger.h"
 #include "http_parsing.h"
 #include "web_server.h"
 #include "i2c_ads1115.h"
@@ -43,6 +43,8 @@ void setup() {
   Serial.begin(115200);
 
   gen_nmea0183_msg("$BBTXT,01,01,01,FirmwareTag: %s", firmware_tag);
+
+  restore_settings();
 
   eth.initETH(&Serial2, 9600, G1, G2);
 
@@ -115,9 +117,21 @@ void loop() {
         HttpRequest parsedRequest = parseHttpRequest(httpRequest);
         log_http_request(parsedRequest);
 
-        handle_OnConnect(&eth, connectionId);
-        delay(500);
-
+        if (parsedRequest.path.equals("/settings")) {
+          for (int i = 0; i < parsedRequest.queryArgCount; i++) {
+            if (parsedRequest.queryArgs[i].key.equals("phone")) {
+              phoneNumber = parsedRequest.queryArgs[i].value;
+            } else if (parsedRequest.queryArgs[i].key.equals("api_key")) {
+              apiKey = parsedRequest.queryArgs[i].value;
+            }
+          }
+          save_settings(phoneNumber, apiKey);
+          handle_OnSettings(&eth, connectionId);
+        } else {
+          handle_OnConnect(&eth, connectionId);
+          delay(500);
+        }
+        
         eth.sendCMD("AT+CIPCLOSE=" + String(connectionId));
         delay(1000);
       }
@@ -125,6 +139,8 @@ void loop() {
   }
   if (ethUp && M5.BtnA.wasPressed()) {
     String message = "Hello from esp32!";
-    messenger_send(&eth, phoneNumber, apiKey, message);
+    if (phoneNumber.length() > 0 && apiKey.length() > 0) {
+      messenger_send(&eth, phoneNumber, apiKey, message);
+    }
   }
 }

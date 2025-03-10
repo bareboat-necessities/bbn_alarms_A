@@ -12,7 +12,7 @@
 String phoneNumber = "17326198507"; //"REPLACE_WITH_YOUR_PHONE_NUMBER";
 String apiKey = "6749268"; // "REPLACE_WITH_API_KEY";
 
-void messenger_send(Unit_PoESP32 *eth, String message) {
+void messenger_send(Unit_PoESP32 *eth, String phoneNumber, String apiKey, String message) {
   auto resp = eth->createSSLClient(MESSENGER_SERVER, 443);
   int idx = resp.indexOf("CONNECT");
   Serial.printf("idx %d\n", idx);

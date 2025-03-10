@@ -96,11 +96,9 @@ void loop() {
   // Check for incoming data from the Ethernet unit
   if (webServerUp && Serial2.available() > 4) {
     String response = eth.waitMsg(200, "Connection:");
-    Serial.println(response);
 
     // Check if a new client has connected
     int idx = response.indexOf("+IPD");
-    Serial.printf("idx %d\n", idx);
     if (idx != -1 && idx < 1024) {
       // Extract the connection ID and data
       int connectionId = response.charAt(5 + idx) - '0';  // Get the connection ID
@@ -111,10 +109,7 @@ void loop() {
         httpRequest = httpRequest.substring(idx2 + 1);
       }
 
-      Serial.print("Received data from connection ID: ");
-      Serial.println(connectionId);
-      Serial.print("Data: ");
-      Serial.println(httpRequest);
+      gen_nmea0183_msg("$BBTXT,01,01,01,Received data from connID: %s", String(connectionId).c_str());
 
       if (httpRequest.startsWith("GET")) {
         HttpRequest parsedRequest = parseHttpRequest(httpRequest);
@@ -129,7 +124,6 @@ void loop() {
     }
   }
   if (ethUp && M5.BtnA.wasPressed()) {
-    Serial.println("BtnA.wasPressed");
     String message = "Hello from esp32!";
     messenger_send(&eth, phoneNumber, apiKey, message);
   }

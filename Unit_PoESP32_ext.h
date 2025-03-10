@@ -165,7 +165,7 @@ bool Unit_PoESP32::sendTCPData(int connectionId, uint8_t* buffer, size_t size) {
 /*! @brief send a string via TCP
     @return True if send successfully, false otherwise. */
 bool Unit_PoESP32::sendTCPString(int connectionId, const char* string) {
-  return sendTCPData(connectionId, (uint8_t*) string, strlen(string));
+  return sendTCPData(connectionId, (uint8_t*) string, strlen(string) + 1);
 }
 
 #endif

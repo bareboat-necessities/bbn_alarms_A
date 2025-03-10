@@ -153,7 +153,7 @@ String Unit_PoESP32::createSSLClient(String ip, int port) {
     @return True if send successfully, false otherwise. */
 bool Unit_PoESP32::sendTCPData(int connectionId, uint8_t* buffer, size_t size) {
   sendCMD("AT+CIPSEND=" + String(connectionId) + "," + String(size));
-  waitMsg(100, "OK");
+  waitMsg(500, "OK");
   _serial->write(buffer, size);
   _serial->print("");
   //_serial->flush();

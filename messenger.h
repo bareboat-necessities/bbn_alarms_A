@@ -23,8 +23,8 @@ void messenger_send(Unit_PoESP32 *eth, String phoneNumber, String apiKey, String
     gen_nmea0183_msg("$BBTXT,01,01,01,Established connID: %s", String(connectionId).c_str());
     
     String req = String("GET ") + "/whatsapp.php?phone=" + phoneNumber
-                 + "&apikey=" + apiKey + "&text=" + urlEncode(message) + " HTTP/1.1\nHost: " + MESSENGER_SERVER 
-                 + "\nConnection: close\n\n";
+                 + "&apikey=" + apiKey + "&text=" + urlEncode(message) + " HTTP/1.1\r\nHost: " + MESSENGER_SERVER 
+                 + "\r\nConnection: close\r\n\r\n";
     eth->sendCMD("AT+CIPSEND=" + String(connectionId) + "," + String(req.length()));
     delay(100);
     eth->sendCMD(req);

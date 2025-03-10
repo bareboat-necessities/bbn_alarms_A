@@ -141,7 +141,7 @@ void loop() {
         }
 
         eth.sendCMD("AT+CIPCLOSE=" + String(connectionId));
-        delay(1000);
+        eth.waitMsg(1000, "OK", "ERROR");
       }
     }
   }

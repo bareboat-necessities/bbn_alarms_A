@@ -25,15 +25,12 @@ void setup() {
   M5.begin(cfg);
   Serial.begin(115200);
 
-  Serial.println("device connecting");
-  eth.Init(&Serial2, 9600, G1, G2);
-  Serial.println("wait device connect");
+  eth.initETH(&Serial2, 9600, G1, G2);
   while (!eth.checkDeviceConnect()) {
     delay(10);
   }
   Serial.println("device connected");
 
-  Serial.println("wait ethernet connect");
   while (!eth.checkETHConnect()) {
     delay(10);
   }

@@ -113,8 +113,8 @@ const char settings_page_tail[] PROGMEM = R"=====(
 )=====";
 
 String build_begin_response(Unit_PoESP32 *client, int connectionId, int request_status = 200) {
-  return (String("HTTP/1.1 ") + String(request_status) + (request_status == 200 ? String(" OK\n") : String(" Not Found\n")) +
-     "Content-Type: text/html\nConnection: close\n\n");
+  return (String("HTTP/1.1 ") + String(request_status) + (request_status == 200 ? String(" OK\r\n") : String(" Not Found\r\n")) +
+     "Content-Type: text/html\r\nConnection: close\r\n\r\n");
 }
 
 void begin_response(Unit_PoESP32 *client, int connectionId, int request_status = 200) {

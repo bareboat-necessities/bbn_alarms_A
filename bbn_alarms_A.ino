@@ -25,6 +25,13 @@ Unit_PoESP32 eth;
 bool ethUp = false;
 bool webServerUp = false;
 
+void reportIpAddress() {
+  auto IP = eth.getLocalIP();
+  if (IP.length() > 0) {
+    gen_nmea0183_msg("$BBTXT,01,01,01,LocalIP: %s", IP.c_str());
+  }
+}
+
 void setup() {
   auto cfg = M5.config();
   M5.begin(cfg);
@@ -46,10 +53,7 @@ void setup() {
       if (ethUp) {
         auto localInfo = eth.obtainLocalIP();
         if (localInfo.length() > 0) {
-          auto IP = eth.getLocalIP();
-          if (IP.length() > 0) {
-            gen_nmea0183_msg("LocalIP: %s", IP.c_str());
-          }
+          reportIpAddress();
         }
       }
     }
@@ -77,10 +81,7 @@ void setup() {
 
   app.onRepeat(30000, []() {
     if (ethUp) {
-      auto IP = eth.getLocalIP();
-      if (IP.length() > 0) {
-        gen_nmea0183_msg("LocalIP: %s", IP.c_str());
-      }
+      reportIpAddress();
     }
   });
 }

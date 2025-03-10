@@ -124,9 +124,10 @@ void main_page(Unit_PoESP32 *client, int connectionId, bool stored, int request_
   client->sendTCPString(connectionId, settings_page_head);
   client->sendTCPString(connectionId, style);
   client->sendTCPString(connectionId, settings_page_body);
-  client->sendTCPString(connectionId, form);
   if (stored) {
     client->sendTCPString(connectionId, conf_stored);
+  } else {
+    client->sendTCPString(connectionId, form);
   }
   client->sendTCPString(connectionId, settings_page_tail);
 }

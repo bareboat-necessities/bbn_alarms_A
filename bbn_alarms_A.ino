@@ -43,9 +43,12 @@ void setup() {
     if (!ethUp) {
       gen_nmea0183_txt("Waiting for ethernet connected");
       ethUp = eth.checkETHConnect();
-      auto localInfo = eth.obtainLocalIP();
-      Serial.println(localInfo.c_str());
-      Serial.println(eth.getLocalIP().c_str());
+      if (ethUp) {
+        auto IP = eth.getLocalIP();
+        if (IP.length() > 0) {
+          gen_nmea0183_msg("LocalIP: %s", IP.c_str());
+        }
+      }
     }
   });
 
@@ -66,6 +69,15 @@ void setup() {
       Serial.println(servActivationResponse.c_str());
 
       webServerUp = true;
+    }
+  });
+
+  app.onRepeat(30000, []() {
+    if (ethUp) {
+      auto IP = eth.getLocalIP();
+      if (IP.length() > 0) {
+        gen_nmea0183_msg("LocalIP: %s", IP.c_str());
+      }
     }
   });
 }

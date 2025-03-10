@@ -46,7 +46,7 @@ void setup() {
 
   restore_settings();
   gen_nmea0183_msg("$BBTXT,01,01,01,Loaded settings. %s",
-                   (String("phone:") + phoneNumber + String(" apiKey:") + apiKey));
+                   (String("phone:") + phoneNumber + String(" apiKey:") + apiKey).c_str());
 
   eth.initETH(&Serial2, 9600, G1, G2);
 
@@ -129,7 +129,7 @@ void loop() {
           }
           save_settings(phoneNumber, apiKey);
           gen_nmea0183_msg("$BBTXT,01,01,01,Stored settings. %s",
-                           (String("phone:") + phoneNumber + String(" apiKey:") + apiKey));
+                           (String("phone:") + phoneNumber + String(" apiKey:") + apiKey).c_str());
           handle_OnSettings(&eth, connectionId);
         } else {
           handle_OnConnect(&eth, connectionId);

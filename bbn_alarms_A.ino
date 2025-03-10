@@ -50,7 +50,7 @@ void setup() {
 
   eth.initETH(&Serial2, 9600, G1, G2);
 
-  eth.sendCMD("AT+UART_CUR=115200"); // shutdown server and close connections
+  eth.sendCMD("AT+UART_CUR=115200"); // 
   eth.waitMsg(100, "OK", "ERROR");
 
   mcu_sensors_scan();

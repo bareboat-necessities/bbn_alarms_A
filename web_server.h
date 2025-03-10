@@ -82,6 +82,12 @@ const char form[] PROGMEM = R"=====(
 </form>
 )=====";
 
+const char conf_stored[] PROGMEM = R"=====(
+<div>
+  <p>Settings stored.</p>
+</div>
+)=====";
+
 const char settings_page_head[] PROGMEM = R"=====(
 <!DOCTYPE html>
 <html lang="en">
@@ -113,12 +119,15 @@ void begin_response(Unit_PoESP32 *client, int connectionId, int request_status =
     ).c_str());
 }
 
-void main_page(Unit_PoESP32 *client, int connectionId, int request_status = 200) {
+void main_page(Unit_PoESP32 *client, int connectionId, bool stored, int request_status = 200) {
   begin_response(client, connectionId, request_status);
   client->sendTCPString(connectionId, settings_page_head);
   client->sendTCPString(connectionId, style);
   client->sendTCPString(connectionId, settings_page_body);
   client->sendTCPString(connectionId, form);
+  if (stored) {
+    client->sendTCPString(connectionId, conf_stored);
+  }
   client->sendTCPString(connectionId, settings_page_tail);
 }
 
@@ -127,11 +136,11 @@ void error_page(Unit_PoESP32 *client, int connectionId, int request_status = 200
 }
 
 void handle_OnConnect(Unit_PoESP32 *client, int connectionId) {
-  main_page(client, connectionId);
+  main_page(client, false, connectionId);
 }
 
 void handle_OnSettings(Unit_PoESP32 *client, int connectionId) {
-  //client.println(html_response);
+  main_page(client, true, connectionId);
 }
 
 void handle_NotFound(Unit_PoESP32 *client, int connectionId, String url) {

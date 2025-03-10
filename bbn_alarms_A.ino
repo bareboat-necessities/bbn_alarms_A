@@ -132,8 +132,11 @@ void loop() {
                            (String("phone:") + phoneNumber + String(" apiKey:") + apiKey).c_str());
           handle_OnSettings(&eth, connectionId);
           delay(500);
-        } else {
+        } else if (parsedRequest.path.equals("/")) {
           handle_OnConnect(&eth, connectionId);
+          delay(500);
+        } else {
+          handle_NotFound(&eth, connectionId, parsedRequest.path);
           delay(500);
         }
 

@@ -97,21 +97,7 @@ void loop() {
   }
   if (M5.BtnA.wasPressed()) {
     Serial.println("BtnA.wasPressed");
-    auto resp = eth.createSSLClient(MESSENGER_SERVER, 443);
-    int idx = resp.indexOf("CONNECT");
-    Serial.printf("idx %d\n", idx);
-    if (idx != -1 && idx > 1 && idx < 1024) {
-      int connectionId = resp.charAt(idx - 2) - '0';  // Get the connection ID
-      Serial.print("Established connection ID: ");
-      Serial.println(connectionId);
-
-      String message = "Hello from esp32!";
-      String req = String("GET ") + "/whatsapp.php?phone=" + phoneNumber
-                   + "&apikey=" + apiKey + "&text=" + urlEncode(message) + " HTTP/1.1\nHost: api.callmebot.com\nConnection: close\n\n";
-      eth.sendCMD("AT+CIPSEND=" + String(connectionId) + "," + String(req.length()));
-      delay(100);
-      eth.sendCMD(req);
-      delay(2000);
-    }
+    String message = "Hello from esp32!";
+    messenger_send(&eth, message);
   }
 }

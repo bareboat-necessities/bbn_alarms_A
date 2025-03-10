@@ -23,7 +23,7 @@ void gpio_jsn_sr04t_report() {
 void gpio_jsn_sr04t_try_init() {
   pinMode(NEWPING_TRIGGER_PIN, OUTPUT);
   pinMode(NEWPING_ECHO_PIN, INPUT);
-  app.onRepeat(2000, []() {
+  app.onRepeat(3000, []() {
     gpio_jsn_sr04t_report();
   });
 }

@@ -131,6 +131,7 @@ void loop() {
           gen_nmea0183_msg("$BBTXT,01,01,01,Stored settings. %s",
                            (String("phone:") + phoneNumber + String(" apiKey:") + apiKey).c_str());
           handle_OnSettings(&eth, connectionId);
+          delay(500);
         } else {
           handle_OnConnect(&eth, connectionId);
           delay(500);

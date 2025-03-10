@@ -22,13 +22,16 @@ static const char* firmware_tag = "bbn_alarms_A";
 
 Unit_PoESP32 eth;
 
+bool ethUp = false;
+bool webServerUp = false;
+
 void setup() {
   auto cfg = M5.config();
   M5.begin(cfg);
   Serial.begin(115200);
 
   gen_nmea0183_msg("$BBTXT,01,01,01,FirmwareTag: %s", firmware_tag);
-  
+
   eth.initETH(&Serial2, 9600, G1, G2);
 
   gen_nmea0183_txt("Waiting for ethernet device connected");
@@ -36,25 +39,35 @@ void setup() {
     delay(10);
   }
 
-  gen_nmea0183_txt("Waiting for ethernet connected");
-  while (!eth.checkETHConnect()) {
-    delay(10);
-  }
+  app.onRepeat(1000, []() {
+    if (!ethUp) {
+      gen_nmea0183_txt("Waiting for ethernet connected");
+      ethUp = eth.checkETHConnect();
+      auto localInfo = eth.obtainLocalIP();
+      Serial.println(localInfo.c_str());
+      Serial.println(eth.getLocalIP().c_str());
+    }
+  });
 
-  auto localInfo = eth.obtainLocalIP();
-  Serial.println(localInfo.c_str());
+  app.onRepeat(1000, []() {
+    if (ethUp && !webServerUp) {
+      gen_nmea0183_txt("Waiting for web server start");
 
-  eth.sendCMD("AT+CIPSERVER=0,1"); // shutdown server and close connections
-  eth.waitMsg(100, "OK", "ERROR");
-  
-  eth.sendCMD("AT+CIPMODE=0");
-  eth.waitMsg(100, "OK");
-   
-  auto muxResponse = eth.activateMUXMode();
-  Serial.println(muxResponse.c_str());
+      eth.sendCMD("AT+CIPSERVER=0,1"); // shutdown server and close connections
+      eth.waitMsg(100, "OK", "ERROR");
 
-  auto servActivationResponse = eth.activateTcpServerPort80();
-  Serial.println(servActivationResponse.c_str());
+      eth.sendCMD("AT+CIPMODE=0");
+      eth.waitMsg(100, "OK");
+
+      auto muxResponse = eth.activateMUXMode();
+      Serial.println(muxResponse.c_str());
+
+      auto servActivationResponse = eth.activateTcpServerPort80();
+      Serial.println(servActivationResponse.c_str());
+
+      webServerUp = true;
+    }
+  });
 }
 
 void loop() {
@@ -62,7 +75,7 @@ void loop() {
   app.tick();
 
   // Check for incoming data from the Ethernet unit
-  if (Serial2.available() > 4) {
+  if (webServerUp && Serial2.available() > 4) {
     String response = eth.waitMsg(200, "Connection:");
     Serial.println(response);
 
@@ -90,13 +103,13 @@ void loop() {
 
         handle_OnConnect(&eth, connectionId);
         delay(500);
-        
+
         eth.sendCMD("AT+CIPCLOSE=" + String(connectionId));
         delay(1000);
       }
     }
   }
-  if (M5.BtnA.wasPressed()) {
+  if (ethUp && M5.BtnA.wasPressed()) {
     Serial.println("BtnA.wasPressed");
     String message = "Hello from esp32!";
     messenger_send(&eth, phoneNumber, apiKey, message);

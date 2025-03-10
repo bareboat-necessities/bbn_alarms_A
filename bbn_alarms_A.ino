@@ -18,6 +18,8 @@ ReactESP app;
 #include "i2c_ads1115.h"
 #include "gpio_jsn_sr04t.h"
 
+static const char* firmware_tag = "bbn_alarms_A";
+
 Unit_PoESP32 eth;
 
 void setup() {
@@ -26,15 +28,17 @@ void setup() {
   Serial.begin(115200);
 
   eth.initETH(&Serial2, 9600, G1, G2);
+
+  gen_nmea0183_msg("$BBTXT,01,01,01,FirmwareTag: %s", firmware_tag);
+  gen_nmea0183_txt("Waiting for ethernet device connected");
   while (!eth.checkDeviceConnect()) {
     delay(10);
   }
-  Serial.println("device connected");
 
+  gen_nmea0183_txt("Waiting for ethernet connected");
   while (!eth.checkETHConnect()) {
     delay(10);
   }
-  Serial.println("ethernet connected");
 
   auto localInfo = eth.obtainLocalIP();
   Serial.println(localInfo.c_str());
@@ -81,17 +85,7 @@ void loop() {
 
       if (httpRequest.startsWith("GET")) {
         HttpRequest parsedRequest = parseHttpRequest(httpRequest);
-
-        // Print the parsed request
-        Serial.println("Method: " + parsedRequest.method);
-        Serial.println("Path: " + parsedRequest.path);
-        Serial.println("Query String: " + parsedRequest.queryString);
-        Serial.println("Query Arguments:");
-        for (int i = 0; i < parsedRequest.queryArgCount; i++) {
-          Serial.println("  " + parsedRequest.queryArgs[i].key + " = " + parsedRequest.queryArgs[i].value);
-        }
-        Serial.println("Headers:");
-        Serial.println(parsedRequest.headers);
+        log_http_request(parsedRequest);
 
         handle_OnConnect(&eth, connectionId);
         delay(500);

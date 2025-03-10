@@ -95,7 +95,7 @@ String Unit_PoESP32::obtainLocalIP() {
   _readstr = waitMsg(1000, "192", "ERROR");
   int idx = _readstr.indexOf("+CIFSR:ETHIP,\"");
   if (idx != -1) {
-    _localIP = _readstr.substring(idx + 1);
+    _localIP = _readstr.substring(idx + 14, _readstr.length() - 1);
     idx = _localIP.indexOf("\"");
     if (idx != -1) {
       _localIP = _localIP.substring(0, idx);

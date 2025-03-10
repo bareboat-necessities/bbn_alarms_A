@@ -127,20 +127,16 @@ void error_page(Unit_PoESP32 *client, int connectionId, int request_status = 200
 }
 
 void handle_OnConnect(Unit_PoESP32 *client, int connectionId) {
-  Serial.println("Main Page!");
   main_page(client, connectionId);
-  Serial.println("Connection!");
 }
 
 void handle_OnSettings(Unit_PoESP32 *client, int connectionId) {
   //client.println(html_response);
-  Serial.println("Settings!");
 }
 
 void handle_NotFound(Unit_PoESP32 *client, int connectionId, String url) {
   error_page(client, connectionId, 400);
   client->sendTCPString(connectionId, String("<a>The path " + url + " doesn't exist</a>\n").c_str());
-  Serial.println("Error, unrecognised path");
 }
 
 #endif

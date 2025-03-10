@@ -17,6 +17,7 @@ class Unit_PoESP32 {
   private:
     HardwareSerial *_serial;
     String _readstr;
+    String _localIP = "";
 
   public:
     void initETH(HardwareSerial *serial = &Serial2, unsigned long baud = 9600,
@@ -26,6 +27,7 @@ class Unit_PoESP32 {
     bool checkDeviceConnect();
     bool checkETHConnect();
     String obtainLocalIP();
+    String getLocalIP();
     String activateMUXMode();
     String activateTcpServerPort80();
     String createTCPClient(String ip, int port);
@@ -91,7 +93,21 @@ bool Unit_PoESP32::checkETHConnect() {
 String Unit_PoESP32::obtainLocalIP() {
   sendCMD("AT+CIFSR");
   _readstr = waitMsg(1000, "192", "ERROR");
+  int idx = _readstr.indexOf("+CIFSR:ETHIP,\"");
+  if (idx != -1) {
+    _localIP = _readstr.substring(idx + 1);
+    idx = _localIP.indexOf("\"");
+    if (idx != -1) {
+      _localIP = _localIP.substring(0, idx);
+    } else {
+      _localIP = "";
+    }
+  }
   return _readstr;
+}
+
+String Unit_PoESP32::getLocalIP() {
+  return _localIP;
 }
 
 /*! @brief Activate Multi Connection Mode

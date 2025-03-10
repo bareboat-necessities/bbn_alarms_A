@@ -61,7 +61,6 @@ String Unit_PoESP32::waitMsg(unsigned long time, const char* expect_resp1, const
     if ((millis() - start) > time) {
       break;
     }
-    delay(4);
   }
   return restr;
 }

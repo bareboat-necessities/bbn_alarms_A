@@ -51,7 +51,7 @@ void setup() {
   eth.initETH(&Serial2, 9600, G1, G2);
 
   eth.sendCMD("AT+UART_CUR=115200,8,1,0,0"); // 
-  eth.waitMsg(100, "OK", "ERROR");
+  eth.waitMsg(1000, "OK", "ERROR");
   Serial2.end();
   eth.initETH(&Serial2, 115200, G1, G2);
 

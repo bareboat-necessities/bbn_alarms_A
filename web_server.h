@@ -24,7 +24,8 @@ const char conf_stored[] PROGMEM = R"=====(
 </div>
 )=====";
 
-const char settings_page_head[] PROGMEM = R"=====(
+const char settings_page_head[] PROGMEM = 
+  "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nConnection: close\r\n\r\n" R"=====(
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -117,7 +118,7 @@ void begin_response(Unit_PoESP32 *client, int connectionId, int request_status =
 }
 
 void main_page(Unit_PoESP32 *client, int connectionId, bool stored, int request_status = 200) {
-  begin_response(client, connectionId, request_status);
+  //begin_response(client, connectionId, request_status);
   client->sendTCPString(connectionId, settings_page_head);
   if (stored) {
     client->sendTCPString(connectionId, conf_stored);

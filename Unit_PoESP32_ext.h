@@ -45,18 +45,19 @@ void Unit_PoESP32::initETH(HardwareSerial* serial, unsigned long baud, uint8_t r
 /*! @brief Waiting for a period of time to receive a message
     @return Received messages.. */
 String Unit_PoESP32::waitMsg(unsigned long time, String expect_resp1, String expect_resp2) {
-  String restr;
+  String restr = "";
   unsigned long start = millis();
   while (1) {
     if (_serial->available() > 0) {
       String str = _serial->readString();
       restr += str;
-    }
-    if (expect_resp1.length() > 0 && restr.indexOf(expect_resp1) != -1) {
-      break;
-    }
-    if (expect_resp2.length() > 0 && restr.indexOf(expect_resp2) != -1) {
-      break;
+      //Serial.println((String("[") + restr + "]").c_str());
+      if (expect_resp1.length() > 0 && restr.indexOf(expect_resp1) != -1) {
+        break;
+      }
+      if (expect_resp2.length() > 0 && restr.indexOf(expect_resp2) != -1) {
+        break;
+      }
     }
     if ((millis() - start) > time) {
       break;
@@ -154,12 +155,12 @@ String Unit_PoESP32::createSSLClient(String ip, int port) {
 bool Unit_PoESP32::sendTCPData(int connectionId, uint8_t* buffer, size_t size) {
   sendCMD("AT+CIPSEND=" + String(connectionId) + "," + String(size));
   _readstr = waitMsg(500, "OK");
-  Serial.println(_readstr.c_str());
+  //Serial.println(_readstr.c_str());
   _serial->write(buffer, size);
-  //_serial->print("");
-  //_serial->flush();
+  _serial->print("");
   _readstr = waitMsg(10000, "SEND");
-  Serial.println(_readstr.c_str());
+  //_serial->flush();
+  //Serial.println(_readstr.c_str());
   return _readstr.indexOf("SEND OK") != -1;
 }
 

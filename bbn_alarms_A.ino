@@ -121,7 +121,7 @@ void loop() {
 
       if (httpRequest.startsWith("GET")) {
         HttpRequest parsedRequest = parseHttpRequest(httpRequest);
-        log_http_request(parsedRequest);
+        //log_http_request(parsedRequest);
 
         if (parsedRequest.path.equals("/settings")) {
           for (int i = 0; i < parsedRequest.queryArgCount; i++) {

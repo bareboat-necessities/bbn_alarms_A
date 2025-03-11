@@ -143,7 +143,6 @@ void loop() {
           handle_NotFound(&eth, connectionId, parsedRequest.path);
           delay(1000);
         }
-
         eth.sendCMD("AT+CIPCLOSE=" + String(connectionId));
         eth.waitMsg(1000, "OK", "ERROR");
       }

@@ -8,8 +8,7 @@
 
 #define conf_stored R"=====(<div><p>Settings stored.</p></div>)====="
 
-#define form_box R"=====(
-<form id="form" method="GET" action="/settings">
+#define form_box R"=====(<form id="form" method="GET" action="/settings">
 <p>Enter your phone number and generated CallMeBot API key for WhatsApp. For details, see:
  <a target="_blank" rel="noopener noreferrer" href="https://www.callmebot.com/blog/free-api-whatsapp-messages/">this guide</a>.
 </p>
@@ -21,8 +20,7 @@
 </form>
 )====="
 
-#define settings_page_head R"=====(
-<!DOCTYPE html>
+#define settings_page_head R"=====(<!DOCTYPE html>
 <html lang="en">
 <head>
  <meta charset="UTF-8">
@@ -96,14 +94,12 @@ body {
 <div class="fbox">
  <h1>WhatsApp API Configuration</h1>)====="
 
-#define settings_page_tail R"=====(
-</div>
+#define settings_page_tail R"=====(</div>
 </body>
 </html>
 )====="
 
-#define err_html R"=====(
-<!DOCTYPE html>
+#define err_html R"=====(<!DOCTYPE html>
 <html lang="en">
 <body>
 <div><p>The requested path doesn't exist</p></div>

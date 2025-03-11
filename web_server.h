@@ -4,6 +4,7 @@
 #include "Unit_PoESP32_ext.h"
 
 #define http_headers "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nConnection: close\r\n\r\n"
+#define http_err_headers "HTTP/1.1 400 Not Found\r\nContent-Type: text/html\r\nConnection: close\r\n\r\n"
 
 #define conf_stored R"=====(
 <div><p>Settings stored.</p></div>)====="
@@ -100,21 +101,21 @@ body {
 </body>
 </html>)====="
 
+#define err_html R"=====(
+<!DOCTYPE html>
+<html lang="en">
+<body>
+<div><p>The requested path doesn't exist</p></div>
+</body>
+</html>)====="
+
 const char config_page[] PROGMEM = "" http_headers settings_page_head "" 
  form_box settings_page_tail;
 
 const char confirmation_page[] PROGMEM = "" http_headers settings_page_head "" 
  conf_stored settings_page_tail;
 
-String build_begin_response(Unit_PoESP32 *client, int connectionId, int request_status = 200) {
-  return (String("HTTP/1.1 ") + String(request_status) + (request_status == 200 ? String(" OK\r\n") : String(" Not Found\r\n")) +
-     "Content-Type: text/html\r\nConnection: close\r\n\r\n");
-}
-
-void begin_response(Unit_PoESP32 *client, int connectionId, int request_status = 200) {
-  client->sendTCPString(connectionId, 
-    build_begin_response(client, connectionId, request_status).c_str());
-}
+const char err_page[] PROGMEM = "" http_err_headers err_html;
 
 void main_page(Unit_PoESP32 *client, int connectionId, bool stored, int request_status = 200) {
   if (stored) {
@@ -122,10 +123,6 @@ void main_page(Unit_PoESP32 *client, int connectionId, bool stored, int request_
   } else {
     client->sendTCPString(connectionId, config_page);
   }
-}
-
-void error_page(Unit_PoESP32 *client, int connectionId, int request_status = 200) {
-  begin_response(client, connectionId, request_status);
 }
 
 void handle_OnConnect(Unit_PoESP32 *client, int connectionId) {
@@ -137,8 +134,7 @@ void handle_OnSettings(Unit_PoESP32 *client, int connectionId) {
 }
 
 void handle_NotFound(Unit_PoESP32 *client, int connectionId, String url) {
-  error_page(client, connectionId, 400);
-  client->sendTCPString(connectionId, String("<a>The path " + url + " doesn't exist</a>\n").c_str());
+  client->sendTCPString(connectionId, err_page);
 }
 
 #endif

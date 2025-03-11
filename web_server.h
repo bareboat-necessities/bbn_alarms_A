@@ -15,8 +15,8 @@
 </p>
 <label for="phone">Phone Number:</label>
 <input id="phone" type="text" name="phone" value="" placeholder="+PhoneNumber" required>
-<label for="api_key">API Key:</label>
-<input id="api_key" type="text" name="api_key" value="" placeholder="API Key" required>
+<label for="key">API Key:</label>
+<input id="key" type="text" name="key" value="" placeholder="API Key" required>
 <input id="button" type="submit" value="Submit">
 </form>)====="
 

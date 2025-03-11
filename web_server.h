@@ -7,7 +7,8 @@
 #define http_err_headers "HTTP/1.1 400 Not Found\r\nContent-Type: text/html\r\nConnection: close\r\n\r\n"
 
 #define conf_stored R"=====(
-<div><p>Settings stored.</p></div>)====="
+<div><p>Settings stored.</p></div>
+)====="
 
 #define form_box R"=====(
 <form id="form" method="GET" action="/settings">
@@ -19,7 +20,8 @@
 <label for="key">API Key:</label>
 <input id="key" type="text" name="key" value="" placeholder="API Key" required>
 <input id="button" type="submit" value="Submit">
-</form>)====="
+</form>
+)====="
 
 #define settings_page_head R"=====(
 <!DOCTYPE html>
@@ -99,7 +101,8 @@ body {
 #define settings_page_tail R"=====(
 </div>
 </body>
-</html>)====="
+</html>
+)====="
 
 #define err_html R"=====(
 <!DOCTYPE html>
@@ -107,7 +110,8 @@ body {
 <body>
 <div><p>The requested path doesn't exist</p></div>
 </body>
-</html>)====="
+</html>
+)====="
 
 const char config_page[] PROGMEM = "" http_headers settings_page_head "" 
  form_box settings_page_tail;

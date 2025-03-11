@@ -22,7 +22,7 @@ class Unit_PoESP32 {
   public:
     void initETH(HardwareSerial *serial = &Serial2, unsigned long baud = 9600,
               uint8_t rx = G1, uint8_t tx = G2);
-    String waitMsg(unsigned long time = 5, const char* expect_resp1 = NULL, const char* expect_resp2 = NULL);
+    String waitMsg(unsigned long time = 5, String expect_resp1 = "", String expect_resp2 = "");
     void sendCMD(String command);
     bool checkDeviceConnect();
     bool checkETHConnect();
@@ -44,7 +44,7 @@ void Unit_PoESP32::initETH(HardwareSerial* serial, unsigned long baud, uint8_t r
 
 /*! @brief Waiting for a period of time to receive a message
     @return Received messages.. */
-String Unit_PoESP32::waitMsg(unsigned long time, const char* expect_resp1, const char* expect_resp2) {
+String Unit_PoESP32::waitMsg(unsigned long time, String expect_resp1, String expect_resp2) {
   String restr;
   unsigned long start = millis();
   while (1) {
@@ -52,10 +52,10 @@ String Unit_PoESP32::waitMsg(unsigned long time, const char* expect_resp1, const
       String str = _serial->readString();
       restr += str;
     }
-    if (expect_resp1 != NULL && restr.indexOf(expect_resp1) != -1) {
+    if (expect_resp1.length() > 0 && restr.indexOf(expect_resp1) != -1) {
       break;
     }
-    if (expect_resp2 != NULL && restr.indexOf(expect_resp2) != -1) {
+    if (expect_resp2.length() > 0 && restr.indexOf(expect_resp2) != -1) {
       break;
     }
     if ((millis() - start) > time) {
@@ -153,19 +153,20 @@ String Unit_PoESP32::createSSLClient(String ip, int port) {
     @return True if send successfully, false otherwise. */
 bool Unit_PoESP32::sendTCPData(int connectionId, uint8_t* buffer, size_t size) {
   sendCMD("AT+CIPSEND=" + String(connectionId) + "," + String(size));
-  waitMsg(500, "OK");
+  _readstr = waitMsg(500, "OK");
+  Serial.println(_readstr.c_str());
   _serial->write(buffer, size);
-  _serial->print("");
+  //_serial->print("");
   //_serial->flush();
   _readstr = waitMsg(10000, "SEND");
-  //Serial.println(_readstr.c_str());
+  Serial.println(_readstr.c_str());
   return _readstr.indexOf("SEND OK") != -1;
 }
 
 /*! @brief send a string via TCP
     @return True if send successfully, false otherwise. */
 bool Unit_PoESP32::sendTCPString(int connectionId, const char* string) {
-  return sendTCPData(connectionId, (uint8_t*) string, strlen(string) + 1);
+  return sendTCPData(connectionId, (uint8_t*) string, strlen(string));
 }
 
 #endif

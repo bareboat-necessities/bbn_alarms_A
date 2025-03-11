@@ -6,9 +6,9 @@
 #define http_headers "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nConnection: close\r\n\r\n"
 #define http_err_headers "HTTP/1.1 400 Not Found\r\nContent-Type: text/html\r\nConnection: close\r\n\r\n"
 
-#define conf_stored R"=====(<div><p>Settings stored.</p></div>)====="
+#define conf_stored R"==1==(<div><p>Settings stored.</p></div>)==1=="
 
-#define form_box R"=====(<form id="form" method="GET" action="/settings">
+#define form_box R"==2==(<form id="form" method="GET" action="/settings">
 <p>Enter your phone number and generated CallMeBot API key for WhatsApp. For details, see:
  <a target="_blank" rel="noopener noreferrer" href="https://www.callmebot.com/blog/free-api-whatsapp-messages/">this guide</a>.
 </p>
@@ -18,9 +18,9 @@
 <input id="key" type="text" name="key" value="" placeholder="API Key" required>
 <input id="button" type="submit" value="Submit">
 </form>
-)====="
+)==2=="
 
-#define settings_page_head R"=====(<!DOCTYPE html>
+#define settings_page_head R"==3==(<!DOCTYPE html>
 <html lang="en">
 <head>
  <meta charset="UTF-8">
@@ -92,20 +92,20 @@ body {
 </head>
 <body>
 <div class="fbox">
- <h1>WhatsApp API Configuration</h1>)====="
+ <h1>WhatsApp API Configuration</h1>)==3=="
 
-#define settings_page_tail R"=====(</div>
+#define settings_page_tail R"==4==(</div>
 </body>
 </html>
-)====="
+)==4=="
 
-#define err_html R"=====(<!DOCTYPE html>
+#define err_html R"==5==(<!DOCTYPE html>
 <html lang="en">
 <body>
 <div><p>The requested path doesn't exist</p></div>
 </body>
 </html>
-)====="
+)==5=="
 
 const char config_page[] PROGMEM = "" http_headers settings_page_head "" 
  form_box settings_page_tail;

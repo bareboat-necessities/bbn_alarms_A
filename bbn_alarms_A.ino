@@ -102,7 +102,7 @@ void loop() {
 
   // Check for incoming data from the Ethernet unit
   if (webServerUp && Serial2.available() > 4) {
-    String response = eth.waitMsg(200, "Connection:");
+    String response = eth.waitMsg(2000, "Host:");
 
     // Check if a new client has connected
     int idx = response.indexOf("+IPD");

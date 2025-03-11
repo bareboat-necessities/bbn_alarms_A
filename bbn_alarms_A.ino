@@ -135,16 +135,16 @@ void loop() {
           gen_nmea0183_msg("$BBTXT,01,01,01,Stored settings. %s",
                            (String("phone:") + phoneNumber + String(" apiKey:") + apiKey).c_str());
           handle_OnSettings(&eth, connectionId);
-          delay(2000);
+          delay(200);
         } else if (parsedRequest.path.equals("/")) {
           handle_OnConnect(&eth, connectionId);
-          delay(2000);
+          delay(200);
         } else {
           handle_NotFound(&eth, connectionId, parsedRequest.path);
-          delay(1000);
+          delay(150);
         }
         eth.sendCMD("AT+CIPCLOSE=" + String(connectionId));
-        eth.waitMsg(1000, "OK", "ERROR");
+        eth.waitMsg(500, "OK", "ERROR");
       }
     }
   }

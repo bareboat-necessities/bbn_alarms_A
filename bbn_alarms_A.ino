@@ -48,11 +48,6 @@ void setup() {
   gen_nmea0183_msg("$BBTXT,01,01,01,Loaded settings. %s",
                    (String("phone:") + phoneNumber + String(" apiKey:") + apiKey).c_str());
 
-  eth.initETH(&Serial2, 9600, G1, G2);
-
-  eth.sendCMD("AT+UART_CUR=115200,8,1,0,0"); // 
-  eth.waitMsg(1000, "OK", "ERROR");
-  Serial2.end();
   eth.initETH(&Serial2, 115200, G1, G2);
 
   mcu_sensors_scan();
@@ -61,6 +56,9 @@ void setup() {
   while (!eth.checkDeviceConnect()) {
     delay(10);
   }
+
+  //eth.sendCMD("AT+UART_CUR=115200,8,1,0,0"); // 
+  //eth.waitMsg(1000, "OK", "ERROR");
 
   app.onRepeat(1000, []() {
     if (!ethUp) {
@@ -128,7 +126,7 @@ void loop() {
           for (int i = 0; i < parsedRequest.queryArgCount; i++) {
             if (parsedRequest.queryArgs[i].key.equals("phone")) {
               phoneNumber = parsedRequest.queryArgs[i].value;
-            } else if (parsedRequest.queryArgs[i].key.equals("api_key")) {
+            } else if (parsedRequest.queryArgs[i].key.equals("key")) {
               apiKey = parsedRequest.queryArgs[i].value;
             }
           }

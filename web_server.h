@@ -3,7 +3,35 @@
 
 #include "Unit_PoESP32_ext.h"
 
-const char style[] PROGMEM = R"=====(
+const char form[] PROGMEM = R"=====(
+<form id="form" method="GET" action="/settings">
+  <p>
+    Enter your phone number and generated CallMeBot API key for WhatsApp. For more details, see:
+    <a target="_blank" rel="noopener noreferrer"
+     href="https://www.callmebot.com/blog/free-api-whatsapp-messages/">this guide</a>.
+  </p>
+  <label for="phone">Phone Number:</label>
+  <input id="phone" type="text" name="phone" value="" placeholder="+CountryCodeNumber" required>
+  <label for="api_key">API Key:</label>
+  <input id="api_key" type="text" name="api_key" value="" placeholder="API Key" required>
+  <input id="button" type="submit" value="Submit">
+</form>
+)=====";
+
+const char conf_stored[] PROGMEM = R"=====(
+<div>
+  <p>Settings stored.</p>
+</div>
+)=====";
+
+const char settings_page_head[] PROGMEM = R"=====(
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WhatsApp API Configuration</title>
+  <style>
 body {
   font-family: Arial, sans-serif;
   background-color: #121212;
@@ -65,40 +93,6 @@ body {
 .form-container a:hover {
   text-decoration: underline;
 }
-)=====";
-
-const char form[] PROGMEM = R"=====(
-<form id="form" method="GET" action="/settings">
-  <p>
-    Enter your phone number and generated CallMeBot API key for WhatsApp. For more details, see:
-    <a target="_blank" rel="noopener noreferrer"
-     href="https://www.callmebot.com/blog/free-api-whatsapp-messages/">this guide</a>.
-  </p>
-  <label for="phone">Phone Number:</label>
-  <input id="phone" type="text" name="phone" value="" placeholder="+CountryCodeNumber" required>
-  <label for="api_key">API Key:</label>
-  <input id="api_key" type="text" name="api_key" value="" placeholder="API Key" required>
-  <input id="button" type="submit" value="Submit">
-</form>
-)=====";
-
-const char conf_stored[] PROGMEM = R"=====(
-<div>
-  <p>Settings stored.</p>
-</div>
-)=====";
-
-const char settings_page_head[] PROGMEM = R"=====(
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WhatsApp API Configuration</title>
-  <style>
-)=====";
-
-const char settings_page_body[] PROGMEM = R"=====(
   </style>
 </head>
 <body>
@@ -123,18 +117,14 @@ void begin_response(Unit_PoESP32 *client, int connectionId, int request_status =
 }
 
 void main_page(Unit_PoESP32 *client, int connectionId, bool stored, int request_status = 200) {
-  String response;
-  response += build_begin_response(client, connectionId, request_status);
-  response += String(settings_page_head);
-  response += String(style);
-  response += String(settings_page_body);
+  begin_response(client, connectionId, request_status);
+  client->sendTCPString(connectionId, settings_page_head);
   if (stored) {
-    response += String(conf_stored);
+    client->sendTCPString(connectionId, conf_stored);
   } else {
-    response += String(form);
+    client->sendTCPString(connectionId, form);
   }
-  response += String(settings_page_tail);
-  client->sendTCPString(connectionId, response.c_str());
+  client->sendTCPString(connectionId, settings_page_tail);
 }
 
 void error_page(Unit_PoESP32 *client, int connectionId, int request_status = 200) {
@@ -142,11 +132,11 @@ void error_page(Unit_PoESP32 *client, int connectionId, int request_status = 200
 }
 
 void handle_OnConnect(Unit_PoESP32 *client, int connectionId) {
-  main_page(client, false, connectionId);
+  main_page(client, connectionId, false);
 }
 
 void handle_OnSettings(Unit_PoESP32 *client, int connectionId) {
-  main_page(client, true, connectionId);
+  main_page(client, connectionId, true);
 }
 
 void handle_NotFound(Unit_PoESP32 *client, int connectionId, String url) {

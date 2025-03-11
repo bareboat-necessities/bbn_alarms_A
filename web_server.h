@@ -6,9 +6,7 @@
 #define http_headers "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nConnection: close\r\n\r\n"
 #define http_err_headers "HTTP/1.1 400 Not Found\r\nContent-Type: text/html\r\nConnection: close\r\n\r\n"
 
-#define conf_stored R"=====(
-<div><p>Settings stored.</p></div>
-)====="
+#define conf_stored R"=====(<div><p>Settings stored.</p></div>)====="
 
 #define form_box R"=====(
 <form id="form" method="GET" action="/settings">

@@ -27,7 +27,7 @@ float i2c_ads1115_voltage(ADS1115 *i2c_ads1115_sensor) {
   //Serial.printf("Cal ADC:%.0f\n", adc_raw * calibration_factor);
   //Serial.printf("Cal Voltage:%.2f mV\n", voltage);
   //Serial.printf("Raw ADC:%d\n\n", adc_raw);
-  return voltage
+  return voltage;
 }
 
 void i2c_ads1115_report(ADS1115 *i2c_ads1115_sensor) {

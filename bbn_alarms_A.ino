@@ -84,11 +84,11 @@ void setup() {
         }
         auto ntpRes = eth.activateNTPClient();
         if (ntpRes.indexOf("OK") != -1) {
-          struct tm time;
-          bool timeOk = eth.getNTPTime(&time);
+          struct tm timeinfo;
+          bool timeOk = eth.getNTPTime(&timeinfo);
           if (timeOk) {
+            rtc_set(&timeinfo);
             gen_nmea0183_txt("Got time from NTP");
-            rtc_set(&time);
           }
         }
       }

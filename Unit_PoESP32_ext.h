@@ -96,11 +96,7 @@ String Unit_PoESP32::obtainLocalIP() {
   if (idx != -1) {
     _localIP = _readstr.substring(idx + 14, _readstr.length() - 1);
     idx = _localIP.indexOf("\"");
-    if (idx != -1) {
-      _localIP = _localIP.substring(0, idx);
-    } else {
-      _localIP = "";
-    }
+    _localIP = idx != -1 ? _localIP.substring(0, idx) : _localIP = "";
   }
   return _readstr;
 }

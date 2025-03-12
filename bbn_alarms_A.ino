@@ -1,5 +1,9 @@
-/**
+/*
    @Hardware: M5AtomS3 + M5Stack ESP32 Ethernet Unit with PoE
+   
+   https://docs.m5stack.com/en/core/AtomS3%20Lite
+   
+   https://docs.m5stack.com/en/unit/poesp32
 */
 
 #include <M5Unified.h>
@@ -57,7 +61,7 @@ void setup() {
     delay(10);
   }
 
-  //eth.sendCMD("AT+UART_CUR=115200,8,1,0,0"); // 
+  //eth.sendCMD("AT+UART_CUR=115200,8,1,0,0"); //
   //eth.waitMsg(1000, "OK", "ERROR");
 
   app.onRepeat(1000, []() {

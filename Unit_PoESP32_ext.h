@@ -195,9 +195,7 @@ bool Unit_PoESP32::getNTPTime(struct tm *tm) {
     int idx = _readstr.indexOf("+CIPSNTPTIME:");
     if (idx != -1) {
       String strTime = _readstr.substring(idx + strlen("+CIPSNTPTIME:"));
-      Serial.println(strTime.c_str());
       int result = parse_asctime(strTime.c_str(), tm);
-      Serial.printf("%d\n", result);
       return result == 0;
     }
   }

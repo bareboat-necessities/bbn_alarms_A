@@ -51,7 +51,6 @@ String Unit_PoESP32::waitMsg(unsigned long time, String expect_resp1, String exp
     if (_serial->available() > 0) {
       String str = _serial->readString();
       restr += str;
-      //Serial.println((String("[") + restr + "]").c_str());
       if (expect_resp1.length() > 0 && restr.indexOf(expect_resp1) != -1) {
         break;
       }

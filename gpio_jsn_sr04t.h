@@ -11,10 +11,15 @@
 
 NewPing gpio_jsn_sr04t_sonar(NEWPING_TRIGGER_PIN, NEWPING_ECHO_PIN, NEWPING_MAX_DISTANCE); // NewPing setup of pins and maximum distance.
 
-void gpio_jsn_sr04t_report() {
-  float temp = 28.0; // Temperature in Celsius (this value would probably come from a temperature sensor).
+float gpio_jsn_sr04t_distance_cm(float temp = 28.0) {
+  // temp - Temperature in Celsius (this value would probably come from a temperature sensor).
   float factor = sqrt(1 + temp / 273.15) / 60.368; // Speed of sound calculation based on temperature.
   float distance_cm = (float)gpio_jsn_sr04t_sonar.ping_median(5) * factor;
+  return distance_cm;
+}
+
+void gpio_jsn_sr04t_report() {
+  float distance_cm = gpio_jsn_sr04t_distance_cm();
   if (fabs(distance_cm) > 0.001) {
     gen_nmea0183_xdr("$BBXDR,D,%.2f,M,Range_JSN_S04T", distance_cm / 100.0);
   }

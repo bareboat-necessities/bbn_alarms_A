@@ -84,7 +84,6 @@ bool Unit_PoESP32::checkDeviceConnect() {
 bool Unit_PoESP32::checkETHConnect() {
   sendCMD("AT+CIPETH?");
   _readstr = waitMsg(1000, "192", "ERROR");
-  //Serial.println(_readstr.c_str());
   return _readstr.indexOf("192") != -1;
 }
 
@@ -131,22 +130,16 @@ String Unit_PoESP32::activateTcpServerPort80() {
 /*! @brief Create a TCP client
     @return String. */
 String Unit_PoESP32::createTCPClient(String ip, int port) {
-  //sendCMD("AT+CIPCLOSE");
-  //delay(500);
   sendCMD("AT+CIPSTARTEX=\"TCP\",\"" + ip + "\"," + String(port));
   _readstr = waitMsg(5000, "CONNECT");
-  //Serial.println(_readstr.c_str());
   return _readstr;
 }
 
 /*! @brief Create a SSL client
     @return String. */
 String Unit_PoESP32::createSSLClient(String ip, int port) {
-  //sendCMD("AT+CIPCLOSE");
-  //delay(500);
   sendCMD("AT+CIPSTARTEX=\"SSL\",\"" + ip + "\"," + String(port));
   _readstr = waitMsg(5000, "CONNECT");
-  //Serial.println(_readstr.c_str());
   return _readstr;
 }
 
@@ -155,12 +148,9 @@ String Unit_PoESP32::createSSLClient(String ip, int port) {
 bool Unit_PoESP32::sendTCPData(int connectionId, uint8_t* buffer, size_t size) {
   sendCMD("AT+CIPSEND=" + String(connectionId) + "," + String(size));
   _readstr = waitMsg(500, String("OK"), String("Error"));
-  //Serial.println(_readstr.c_str());
   _serial->write(buffer, size);
   _serial->print("");
   _readstr = waitMsg(10000, String("SEND"));
-  //_serial->flush();
-  //Serial.println(_readstr.c_str());
   return _readstr.indexOf("SEND OK") != -1;
 }
 

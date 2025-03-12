@@ -14,7 +14,6 @@ using namespace reactesp;
 ReactESP app;
 
 #include "Unit_PoESP32_ext.h"
-#include "hw_rtc.h"
 #include "messenger.h"
 #include "conf_store.h"
 #include "sleep_n_wakeup.h"
@@ -38,6 +37,15 @@ void reportIpAddress() {
   if (IP.length() > 0) {
     gen_nmea0183_msg("$BBTXT,01,01,01,LocalIP: %s", IP.c_str());
   }
+}
+
+void set_time(struct tm *timeinfo) {
+  time_t t = mktime(timeinfo);
+  struct timeval tv = {
+    .tv_sec = t,
+    .tv_usec = 0
+  };
+  settimeofday(&tv, NULL);
 }
 
 void mcu_sensors_scan() {
@@ -87,7 +95,7 @@ void setup() {
           struct tm timeinfo;
           bool timeOk = eth.getNTPTime(&timeinfo);
           if (timeOk) {
-            rtc_set(&timeinfo);
+            set_time(&timeinfo);
             gen_nmea0183_txt("Got time from NTP");
           }
         }

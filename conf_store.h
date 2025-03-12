@@ -35,4 +35,18 @@ uint64_t get_last_hearbeat_time() {
   return hb;
 }
 
+void save_last_alarm_time(uint64_t epoch) {
+  preferences.end();
+  preferences.begin("msg-time", false);
+  preferences.putULong64("alarm", epoch);
+  preferences.end();
+}
+
+uint64_t get_last_alarm_time() {
+  preferences.begin("msg-time", false);
+  uint64_t hb = preferences.getULong64("alarm");
+  preferences.end();
+  return hb;
+}
+
 #endif

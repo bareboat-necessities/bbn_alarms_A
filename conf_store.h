@@ -21,14 +21,14 @@ void restore_settings() {
   preferences.end();
 }
 
-void save_last_hearbeat_time(uint64_t epoch) {
+void save_last_heartbeat_time(uint64_t epoch) {
   preferences.end();
   preferences.begin("msg-time", false);
   preferences.putULong64("hb", epoch);
   preferences.end();
 }
 
-uint64_t get_last_hearbeat_time() {
+uint64_t get_last_heartbeat_time() {
   preferences.begin("msg-time", false);
   uint64_t epoch = preferences.getULong64("hb");
   preferences.end();

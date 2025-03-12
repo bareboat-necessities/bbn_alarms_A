@@ -202,7 +202,14 @@ void loop() {
     if (raise_voltage_alarm || raise_bilge_alarm) {
       uint64_t last_alarm = get_last_alarm_time();
       if (epoch_now - last_alarm > 15 * 60) {
-        messenger_send(&eth, phoneNumber, apiKey, "Alarm");
+        String message = "Alarm";
+        if (raise_voltage_alarm) {
+          message += " Low Voltage";
+        }
+        if (raise_bilge_alarm) {
+          message += " High Bilge";
+        }
+        messenger_send(&eth, phoneNumber, apiKey, message);
         save_last_alarm_time(epoch_now);
       }
     }

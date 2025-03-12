@@ -116,11 +116,7 @@ const char confirmation_page[] PROGMEM = "" http_headers settings_page_head ""
 const char err_page[] PROGMEM = "" http_err_headers err_html;
 
 void main_page(Unit_PoESP32 *client, int connectionId, bool stored, int request_status = 200) {
-  if (stored) {
-    client->sendTCPString(connectionId, confirmation_page);
-  } else {
-    client->sendTCPString(connectionId, config_page);
-  }
+  client->sendTCPString(connectionId, stored ? confirmation_page : config_page);
 }
 
 void handle_OnConnect(Unit_PoESP32 *client, int connectionId) {

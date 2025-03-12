@@ -21,7 +21,7 @@ class Unit_PoESP32 {
 
   public:
     void initETH(HardwareSerial *serial = &Serial2, unsigned long baud = 9600,
-              uint8_t rx = G1, uint8_t tx = G2);
+                 uint8_t rx = G1, uint8_t tx = G2);
     String waitMsg(unsigned long time = 5, String expect_resp1 = "", String expect_resp2 = "");
     void sendCMD(String command);
     bool checkDeviceConnect();
@@ -31,11 +31,66 @@ class Unit_PoESP32 {
     String activateMUXMode();
     String activateTcpServerPort80();
     String activateNTPClient();
+    bool getNTPTime(struct tm *tm);
     String createTCPClient(String ip, int port);
     String createSSLClient(String ip, int port);
     bool sendTCPData(int connectionId, uint8_t *buffer, size_t size);
     bool sendTCPString(int connectionId, const char* string);
 };
+
+// Function to parse asctime-style string into struct tm
+int parse_asctime(const char *asctime_str, struct tm *tm) {
+  // Array of month abbreviations
+  const char *months[] = {
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+  };
+
+  // Temporary variables to store parsed values
+  char day[4], month[4];
+  int tm_mday, tm_hour, tm_min, tm_sec, tm_year;
+
+  // Parse the asctime string
+  if (sscanf(asctime_str, "%3s %3s %d %d:%d:%d %d",
+             day, month, &tm_mday, &tm_hour, &tm_min, &tm_sec, &tm_year) != 7) {
+    return -1; // Parsing failed
+  }
+
+  // Convert month abbreviation to month number (0-11)
+  tm->tm_mon = -1;
+  for (int i = 0; i < 12; i++) {
+    if (strcmp(month, months[i]) == 0) {
+      tm->tm_mon = i;
+      break;
+    }
+  }
+  if (tm->tm_mon == -1) {
+    return -1; // Invalid month
+  }
+
+  // Convert day abbreviation to day of the week (0-6, Sunday=0)
+  tm->tm_wday = -1;
+  const char *days[] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+  for (int i = 0; i < 7; i++) {
+    if (strcmp(day, days[i]) == 0) {
+      tm->tm_wday = i;
+      break;
+    }
+  }
+  if (tm->tm_wday == -1) {
+    return -1; // Invalid day
+  }
+
+  // Assign parsed values to struct tm
+  tm->tm_mday = tm_mday;
+  tm->tm_hour = tm_hour;
+  tm->tm_min = tm_min;
+  tm->tm_sec = tm_sec;
+  tm->tm_year = tm_year - 1900; // Years since 1900
+  tm->tm_isdst = -1; // Daylight saving time information is not available
+
+  return 0; // Success
+}
 
 /*! @brief Initialize the Unit PoESP32.*/
 void Unit_PoESP32::initETH(HardwareSerial* serial, unsigned long baud, uint8_t rx, uint8_t tx) {
@@ -129,6 +184,24 @@ String Unit_PoESP32::activateNTPClient() {
   sendCMD("AT+CIPSNTPCFG=1,0,\"time.google.com\",\"0.pool.ntp.org\",\"1.pool.ntp.org\"");
   _readstr = waitMsg(1000, "OK", "ERROR");
   return _readstr;
+}
+
+/*! @brief Get NTP Time
+    @return True if good. */
+bool Unit_PoESP32::getNTPTime(struct tm *tm) {
+  sendCMD("AT+CIPSNTPTIME?");
+  _readstr = waitMsg(1000, "OK", "ERROR");
+  if (_readstr.indexOf("OK") != -1) {
+    int idx = _readstr.indexOf("+CIPSNTPTIME:");
+    if (idx != -1) {
+      String strTime = _readstr.substring(idx + strlen("+CIPSNTPTIME:"));
+      Serial.println(strTime.c_str());
+      int result = parse_asctime(strTime.c_str(), tm);
+      Serial.printf("%d\n", result);
+      return result == 0;
+    }
+  }
+  return false;
 }
 
 /*! @brief Create a TCP client

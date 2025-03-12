@@ -30,6 +30,7 @@ class Unit_PoESP32 {
     String getLocalIP();
     String activateMUXMode();
     String activateTcpServerPort80();
+    String activateNTPClient();
     String createTCPClient(String ip, int port);
     String createSSLClient(String ip, int port);
     bool sendTCPData(int connectionId, uint8_t *buffer, size_t size);
@@ -119,6 +120,14 @@ String Unit_PoESP32::activateMUXMode() {
 String Unit_PoESP32::activateTcpServerPort80() {
   sendCMD("AT+CIPSERVER=1,80");
   _readstr = waitMsg(1000, "OK", "ERROR");
+  return _readstr;
+}
+
+/*! @brief Activate NTP Client
+    @return String. */
+String Unit_PoESP32::activateNTPClient() {
+  eth.sendCMD("AT+CIPSNTPCFG=1,0,\"time.google.com\",\"0.pool.ntp.org\",\"1.pool.ntp.org\"");
+  _readstr = eth.waitMsg(1000, "OK", "ERROR");
   return _readstr;
 }
 

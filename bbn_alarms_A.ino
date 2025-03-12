@@ -13,8 +13,8 @@
 using namespace reactesp;
 ReactESP app;
 
-#include "hw_rtc.h"
 #include "Unit_PoESP32_ext.h"
+#include "hw_rtc.h"
 #include "messenger.h"
 #include "conf_store.h"
 #include "sleep_n_wakeup.h"

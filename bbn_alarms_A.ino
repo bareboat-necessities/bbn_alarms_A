@@ -29,6 +29,8 @@ Unit_PoESP32 eth;
 #define VOLTAGE_ALARM_THRESHOLD  11.7
 #define LEVEL_CM_ALARM_THRESHOLD 20.0
 
+#define RUN_TIME_MS 120000
+
 bool ethUp = false;
 bool webServerUp = false;
 bool send_alarms = false;
@@ -193,21 +195,26 @@ void loop() {
   if (send_alarms) {
     float voltage = i2c_ads1115_voltage(&i2c_ads1115_sensor_1);
     float water_dist_to_sensor = gpio_jsn_sr04t_distance_cm();
-    bool raise_alarm = false;
-    if (fabs(voltage) > 0.0001 && fabs(voltage) < VOLTAGE_ALARM_THRESHOLD) {
-      raise_alarm = true;
+    bool raise_voltage_alarm = fabs(voltage) > 0.0001 && fabs(voltage) < VOLTAGE_ALARM_THRESHOLD;
+    bool raise_bilge_alarm = fabs(water_dist_to_sensor) < LEVEL_CM_ALARM_THRESHOLD;
+
+    uint64_t epoch_now = (uint64_t) time(NULL);
+    if (raise_voltage_alarm || raise_bilge_alarm) {
+      uint64_t last_alarm = get_last_alarm_time();
+      if (epoch_now - last_alarm > 15 * 60) {
+        messenger_send(&eth, phoneNumber, apiKey, "Alarm");
+        save_last_alarm_time(epoch_now);
+      }
     }
-    if (fabs(water_dist_to_sensor) < LEVEL_CM_ALARM_THRESHOLD) {
-      raise_alarm = true;
-    }
-    if (raise_alarm) {
-      // TODO:
+
+    uint64_t last_heartbeat = get_last_heartbeat_time();
+    if (epoch_now - last_heartbeat > 12 * 60 * 60) {
+      messenger_send(&eth, phoneNumber, apiKey, "Heartbeat");
+      save_last_heartbeat_time(epoch_now);
     }
   }
 
-/*
   if (millis() - start_time > RUN_TIME_MS) {
     cat_nap();
   }
-*/
 }

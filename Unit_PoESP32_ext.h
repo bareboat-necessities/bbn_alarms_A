@@ -126,8 +126,8 @@ String Unit_PoESP32::activateTcpServerPort80() {
 /*! @brief Activate NTP Client
     @return String. */
 String Unit_PoESP32::activateNTPClient() {
-  eth.sendCMD("AT+CIPSNTPCFG=1,0,\"time.google.com\",\"0.pool.ntp.org\",\"1.pool.ntp.org\"");
-  _readstr = eth.waitMsg(1000, "OK", "ERROR");
+  sendCMD("AT+CIPSNTPCFG=1,0,\"time.google.com\",\"0.pool.ntp.org\",\"1.pool.ntp.org\"");
+  _readstr = waitMsg(1000, "OK", "ERROR");
   return _readstr;
 }
 

@@ -12,7 +12,7 @@
 <p>Enter your phone number and generated CallMeBot API key for WhatsApp. For details, see:
  <a target="_blank" rel="noopener noreferrer" href="https://www.callmebot.com/blog/free-api-whatsapp-messages/">this guide</a>.
 </p>
-<label for="phone">Phone Number:</label>
+<label for="phone">Phone:</label>
 <input id="phone" type="text" name="phone" value="" placeholder="+PhoneNumber" required>
 <label for="key">API Key:</label>
 <input id="key" type="text" name="key" value="" placeholder="API Key" required>

@@ -27,7 +27,7 @@ static const char* firmware_tag = "bbn_alarms_A";
 Unit_PoESP32 eth;
 
 #define VOLTAGE_ALARM_THRESHOLD  11.7
-#define LEVEL_CM_ALARM_THRESHOLD 20.0
+#define LEVEL_CM_ALARM_THRESHOLD 25.0
 
 #define RUN_TIME_MS 120000
 

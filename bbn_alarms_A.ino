@@ -1,8 +1,8 @@
 /*
    @Hardware: M5AtomS3 + M5Stack ESP32 Ethernet Unit with PoE
-   
+
    https://docs.m5stack.com/en/core/AtomS3%20Lite
-   
+
    https://docs.m5stack.com/en/unit/poesp32
 */
 
@@ -13,6 +13,7 @@
 using namespace reactesp;
 ReactESP app;
 
+#include "hw_rtc.h"
 #include "Unit_PoESP32_ext.h"
 #include "messenger.h"
 #include "conf_store.h"
@@ -28,6 +29,9 @@ Unit_PoESP32 eth;
 
 bool ethUp = false;
 bool webServerUp = false;
+bool send_alarms = false;
+
+unsigned long start_time = 0UL;
 
 void reportIpAddress() {
   auto IP = eth.getLocalIP();
@@ -48,9 +52,14 @@ void setup() {
 
   gen_nmea0183_msg("$BBTXT,01,01,01,FirmwareTag: %s", firmware_tag);
 
+  rtc_begin();
   restore_settings();
   gen_nmea0183_msg("$BBTXT,01,01,01,Loaded settings. %s",
                    (String("phone:") + phoneNumber + String(" apiKey:") + apiKey).c_str());
+
+  if (phoneNumber.length() > 4 && apiKey.length() > 4) {
+    send_alarms = true;
+  }
 
   eth.initETH(&Serial2, 9600, G1, G2);
 
@@ -73,31 +82,44 @@ void setup() {
         if (localInfo.length() > 0) {
           reportIpAddress();
         }
+        auto ntpRes = eth.activateNTPClient();
+        if (ntpRes.indexOf("OK") != -1) {
+          struct tm time;
+          bool timeOk = eth.getNTPTime(&time);
+          if (timeOk) {
+            gen_nmea0183_txt("Got time from NTP");
+            rtc_set(&time);
+          }
+        }
       }
     }
   });
 
-  app.onRepeat(1000, []() {
-    if (ethUp && !webServerUp) {
-      gen_nmea0183_txt("Waiting for web server start");
+  if (!send_alarms) {
+    app.onRepeat(1000, []() {
+      if (ethUp && !webServerUp) {
+        gen_nmea0183_txt("Waiting for web server start");
 
-      eth.sendCMD("AT+CIPSERVER=0,1"); // shutdown server and close connections
-      eth.waitMsg(100, "OK", "ERROR");
+        eth.sendCMD("AT+CIPSERVER=0,1"); // shutdown server and close connections
+        eth.waitMsg(100, "OK", "ERROR");
 
-      eth.sendCMD("AT+CIPMODE=0");
-      eth.waitMsg(100, "OK");
+        eth.sendCMD("AT+CIPMODE=0");
+        eth.waitMsg(100, "OK");
 
-      auto muxResponse = eth.activateMUXMode();
-      auto servActivationResponse = eth.activateTcpServerPort80();
-      webServerUp = servActivationResponse.indexOf("OK") != -1;
-    }
-  });
+        auto muxResponse = eth.activateMUXMode();
+        auto servActivationResponse = eth.activateTcpServerPort80();
+        webServerUp = servActivationResponse.indexOf("OK") != -1;
+      }
+    });
+  }
 
   app.onRepeat(30000, []() {
     if (ethUp) {
       reportIpAddress();
     }
   });
+
+  start_time = millis();
 }
 
 void loop() {
@@ -157,4 +179,10 @@ void loop() {
       messenger_send(&eth, phoneNumber, apiKey, message);
     }
   }
+
+/*
+  if (millis() - start_time > RUN_TIME_MS) {
+    cat_nap();
+  }
+*/
 }

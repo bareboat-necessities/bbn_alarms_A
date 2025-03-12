@@ -48,7 +48,7 @@ void setup() {
   gen_nmea0183_msg("$BBTXT,01,01,01,Loaded settings. %s",
                    (String("phone:") + phoneNumber + String(" apiKey:") + apiKey).c_str());
 
-  eth.initETH(&Serial2, 115200, G1, G2);
+  eth.initETH(&Serial2, 9600, G1, G2);
 
   mcu_sensors_scan();
 

@@ -5,8 +5,8 @@
 
 #define SLEEP_DURATION (15 * 60 * uS_TO_S_FACTOR)
 
-void cat_nap() {
-  esp_sleep_enable_timer_wakeup(SLEEP_DURATION);
+void cat_nap(unsigned long sleep_uS = SLEEP_DURATION) {
+  esp_sleep_enable_timer_wakeup(sleep_uS);
   esp_deep_sleep_start();
 }
 

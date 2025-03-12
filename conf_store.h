@@ -30,9 +30,9 @@ void save_last_hearbeat_time(uint64_t epoch) {
 
 uint64_t get_last_hearbeat_time() {
   preferences.begin("msg-time", false);
-  uint64_t hb = preferences.getULong64("hb");
+  uint64_t epoch = preferences.getULong64("hb");
   preferences.end();
-  return hb;
+  return epoch;
 }
 
 void save_last_alarm_time(uint64_t epoch) {
@@ -44,9 +44,9 @@ void save_last_alarm_time(uint64_t epoch) {
 
 uint64_t get_last_alarm_time() {
   preferences.begin("msg-time", false);
-  uint64_t hb = preferences.getULong64("alarm");
+  uint64_t epoch = preferences.getULong64("alarm");
   preferences.end();
-  return hb;
+  return epoch;
 }
 
 #endif

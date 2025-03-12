@@ -192,7 +192,7 @@ void loop() {
     }
   }
 
-  if (send_alarms) {
+  if (ethUp && send_alarms) {
     float voltage = i2c_ads1115_voltage(&i2c_ads1115_sensor_1);
     float water_dist_to_sensor = gpio_jsn_sr04t_distance_cm();
     bool raise_voltage_alarm = fabs(voltage) > 0.0001 && fabs(voltage) < VOLTAGE_ALARM_THRESHOLD;

@@ -60,7 +60,6 @@ void setup() {
 
   gen_nmea0183_msg("$BBTXT,01,01,01,FirmwareTag: %s", firmware_tag);
 
-  rtc_begin();
   restore_settings();
   gen_nmea0183_msg("$BBTXT,01,01,01,Loaded settings. %s",
                    (String("phone:") + phoneNumber + String(" apiKey:") + apiKey).c_str());

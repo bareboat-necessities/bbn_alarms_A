@@ -21,16 +21,16 @@ void restore_settings() {
   preferences.end();
 }
 
-void save_last_hearbeat_time(unsigned long epoch) {
+void save_last_hearbeat_time(uint64_t epoch) {
   preferences.end();
   preferences.begin("msg-time", false);
-  preferences.putLong("hb", epoch);
+  preferences.putULong64("hb", epoch);
   preferences.end();
 }
 
-unsigned long get_last_hearbeat_time() {
+uint64_t get_last_hearbeat_time() {
   preferences.begin("msg-time", false);
-  unsigned long hb = preferences.getLong("hb");
+  uint64_t hb = preferences.getULong64("hb");
   preferences.end();
   return hb;
 }

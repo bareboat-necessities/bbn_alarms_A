@@ -21,4 +21,18 @@ void restore_settings() {
   preferences.end();
 }
 
+void save_last_hearbeat_time(unsigned long epoch) {
+  preferences.end();
+  preferences.begin("msg-time", false);
+  preferences.putLong("hb", epoch);
+  preferences.end();
+}
+
+unsigned long get_last_hearbeat_time() {
+  preferences.begin("msg-time", false);
+  unsigned long hb = preferences.getLong("hb");
+  preferences.end();
+  return hb;
+}
+
 #endif

@@ -204,10 +204,10 @@ void loop() {
       if (epoch_now - last_alarm > 15 * 60) {
         String message = "Alarm";
         if (raise_voltage_alarm) {
-          message += " Low Voltage";
+          message += " Low Voltage: " + String(voltage);
         }
         if (raise_bilge_alarm) {
-          message += " High Bilge";
+          message += " High Bilge: " + String(water_dist_to_sensor);
         }
         messenger_send(&eth, phoneNumber, apiKey, message);
         save_last_alarm_time(epoch_now);
@@ -216,7 +216,8 @@ void loop() {
 
     uint64_t last_heartbeat = get_last_heartbeat_time();
     if (epoch_now - last_heartbeat > 12 * 60 * 60) {
-      messenger_send(&eth, phoneNumber, apiKey, "Heartbeat");
+      String message = "Status Voltage: " + String(voltage) + " Bilge: " + String(water_dist_to_sensor);
+      messenger_send(&eth, phoneNumber, apiKey, message);
       save_last_heartbeat_time(epoch_now);
     }
   }

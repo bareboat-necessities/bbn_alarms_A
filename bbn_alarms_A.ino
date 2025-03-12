@@ -26,6 +26,9 @@ static const char* firmware_tag = "bbn_alarms_A";
 
 Unit_PoESP32 eth;
 
+#define VOLTAGE_ALARM_THRESHOLD  11.7
+#define LEVEL_CM_ALARM_THRESHOLD 20.0
+
 bool ethUp = false;
 bool webServerUp = false;
 bool send_alarms = false;
@@ -184,6 +187,21 @@ void loop() {
     String message = "Hello from esp32!";
     if (phoneNumber.length() > 0 && apiKey.length() > 0) {
       messenger_send(&eth, phoneNumber, apiKey, message);
+    }
+  }
+
+  if (send_alarms) {
+    float voltage = i2c_ads1115_voltage(&ADS1115 i2c_ads1115_sensor_1);
+    float water_dist_to_sensor = gpio_jsn_sr04t_distance_cm();
+    bool raise_alarm = false;
+    if (fabs(voltage) > 0.0001 && fabs(voltage) < VOLTAGE_ALARM_THRESHOLD) {
+      raise_alarm = true;
+    }
+    if (fabs(water_dist_to_sensor) < LEVEL_CM_ALARM_THRESHOLD) {
+      raise_alarm = true;
+    }
+    if (raise_alarm) {
+      // TODO:
     }
   }
 

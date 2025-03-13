@@ -23,13 +23,13 @@ void restore_settings() {
 
 void save_last_heartbeat_time(uint64_t epoch) {
   preferences.end();
-  preferences.begin("msg-time", false);
+  preferences.begin("msg-time1", false);
   preferences.putULong64("hb", epoch);
   preferences.end();
 }
 
 uint64_t get_last_heartbeat_time() {
-  preferences.begin("msg-time", false);
+  preferences.begin("msg-time1", false);
   uint64_t epoch = preferences.getULong64("hb");
   preferences.end();
   return epoch;
@@ -37,16 +37,17 @@ uint64_t get_last_heartbeat_time() {
 
 void save_last_alarm_time(uint64_t epoch) {
   preferences.end();
-  preferences.begin("msg-time", false);
+  preferences.begin("msg-time2", false);
   preferences.putULong64("alarm", epoch);
   preferences.end();
 }
 
 uint64_t get_last_alarm_time() {
-  preferences.begin("msg-time", false);
+  preferences.begin("msg-time2", false);
   uint64_t epoch = preferences.getULong64("alarm");
   preferences.end();
   return epoch;
 }
 
 #endif
+

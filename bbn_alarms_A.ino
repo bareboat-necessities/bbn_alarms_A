@@ -156,7 +156,7 @@ void loop() {
 
       gen_nmea0183_msg("$BBTXT,01,01,01,Received data from connID: %s", String(connectionId).c_str());
 
-      if (httpRequest.startsWith("GET")) {
+      if (httpRequest.startsWith("GET") && connectionId > 0) {
         HttpRequest parsedRequest = parseHttpRequest(httpRequest);
         //log_http_request(parsedRequest);
 
@@ -170,7 +170,7 @@ void loop() {
           }
           save_settings(phoneNumber, apiKey);
           gen_nmea0183_msg("$BBTXT,01,01,01,Stored settings. %s",
-                           (String("phone:") + phoneNumber + String(" apiKey:") + apiKey).c_str());
+                           (String("phone:") + phoneNumber + String(" apiKey:") + apiKey).c_str());          
           handle_OnSettings(&eth, connectionId);
           delay(200);
         } else if (parsedRequest.path.equals("/")) {
@@ -223,9 +223,9 @@ void loop() {
   }
 
   if (millis() - start_time > RUN_TIME_MS) {
-     eth.sendCMD("AT+GSLP=" + String(SLEEP_DURATION / 1000));
-     eth.waitMsg(100, "OK", "ERROR");
-     delay(200);
-     cat_nap(SLEEP_DURATION);
+    eth.sendCMD("AT+GSLP=" + String(SLEEP_DURATION / 1000));
+    eth.waitMsg(100, "OK", "ERROR");
+    delay(200);
+    cat_nap(SLEEP_DURATION);
   }
 }

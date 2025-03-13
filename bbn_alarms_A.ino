@@ -220,6 +220,7 @@ void loop() {
         if (raise_bilge_alarm) {
           message += " High Bilge: " + String(water_dist_to_sensor);
         }
+        gen_nmea0183_msg("$BBTXT,01,01,01,%s", String(message).c_str());
         messenger_send(&eth, phoneNumber, apiKey, message);
         save_last_alarm_time(epoch_now);
       }
@@ -227,6 +228,7 @@ void loop() {
     uint64_t last_heartbeat = get_last_heartbeat_time();
     if (epoch_now - last_heartbeat > 12 * 60 * 60) {
       String message = "Status Voltage: " + String(voltage) + " Bilge: " + String(water_dist_to_sensor);
+      gen_nmea0183_msg("$BBTXT,01,01,01,%s", String(message).c_str());
       messenger_send(&eth, phoneNumber, apiKey, message);
       save_last_heartbeat_time(epoch_now);
     }

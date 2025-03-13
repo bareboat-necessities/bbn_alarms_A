@@ -168,7 +168,7 @@ void loop() {
 
       gen_nmea0183_msg("$BBTXT,01,01,01,Received data from connID: %s", String(connectionId).c_str());
 
-      if (httpRequest.startsWith("GET") && connectionId > 0) {
+      if (httpRequest.startsWith("GET") && connectionId >= 0) {
         HttpRequest parsedRequest = parseHttpRequest(httpRequest);
         //log_http_request(parsedRequest);
 

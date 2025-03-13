@@ -232,7 +232,7 @@ void loop() {
     }
   }
   /*
-  if (millis() - start_time > RUN_TIME_MS) {
+  if (send_alarms && (millis() - start_time > RUN_TIME_MS)) {
     eth.sendCMD("AT+GSLP=" + String(SLEEP_DURATION / 1000 - 5000));
     eth.waitMsg(100, "OK", "ERROR");
     delay(200);

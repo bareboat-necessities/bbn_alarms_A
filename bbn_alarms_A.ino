@@ -103,6 +103,12 @@ void setup() {
         if (localInfo.length() > 0) {
           reportIpAddress();
         }
+        
+        eth.sendCMD("AT+CIPMODE=0");
+        eth.waitMsg(100, "OK");
+
+        auto muxResponse = eth.activateMUXMode();
+
         auto ntpRes = eth.activateNTPClient();
         if (ntpRes.indexOf("OK") != -1) {
           struct tm timeinfo;
@@ -124,10 +130,6 @@ void setup() {
         eth.sendCMD("AT+CIPSERVER=0,1"); // shutdown server and close connections
         eth.waitMsg(100, "OK", "ERROR");
 
-        eth.sendCMD("AT+CIPMODE=0");
-        eth.waitMsg(100, "OK");
-
-        auto muxResponse = eth.activateMUXMode();
         auto servActivationResponse = eth.activateTcpServerPort80();
         webServerUp = servActivationResponse.indexOf("OK") != -1;
       }
@@ -196,11 +198,10 @@ void loop() {
   }
   if (ethUp && M5.BtnA.wasPressed()) {
     String message = "Hello from esp32!";
-    if (phoneNumber.length() > 0 && apiKey.length() > 0) {
+    if (phoneNumber.length() > 4 && apiKey.length() > 4) {
       messenger_send(&eth, phoneNumber, apiKey, message);
     }
   }
-
   if (ethUp && send_alarms) {
     float voltage = i2c_ads1115_voltage(&i2c_ads1115_sensor_1);
     float water_dist_to_sensor = gpio_jsn_sr04t_distance_cm();
@@ -222,7 +223,6 @@ void loop() {
         save_last_alarm_time(epoch_now);
       }
     }
-
     uint64_t last_heartbeat = get_last_heartbeat_time();
     if (epoch_now - last_heartbeat > 12 * 60 * 60) {
       String message = "Status Voltage: " + String(voltage) + " Bilge: " + String(water_dist_to_sensor);
@@ -230,7 +230,6 @@ void loop() {
       save_last_heartbeat_time(epoch_now);
     }
   }
-
   if (millis() - start_time > RUN_TIME_MS) {
     eth.sendCMD("AT+GSLP=" + String(SLEEP_DURATION / 1000));
     eth.waitMsg(100, "OK", "ERROR");

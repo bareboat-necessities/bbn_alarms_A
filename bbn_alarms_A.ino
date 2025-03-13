@@ -223,7 +223,7 @@ void loop() {
   }
 
   if (millis() - start_time > RUN_TIME_MS) {
-     eth.sendCMD("AT+GSLP=" + String(SLEEP_DURATION / 1000));
+     eth.sendCMD("AT+GSLP=" + String(SLEEP_DURATION / 1000000));
      eth.waitMsg(100, "OK", "ERROR");
      cat_nap(SLEEP_DURATION);
   }

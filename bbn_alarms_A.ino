@@ -113,7 +113,7 @@ void setup() {
         auto ntpRes = eth.activateNTPClient();
         if (ntpRes.indexOf("OK") != -1) {
           struct tm timeinfo;
-          bool ntpUp = eth.getNTPTime(&timeinfo);
+          ntpUp = eth.getNTPTime(&timeinfo);
           if (ntpUp) {
             set_time(&timeinfo);
             gen_nmea0183_txt("Got time from NTP");    

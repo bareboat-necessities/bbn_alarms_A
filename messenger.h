@@ -13,7 +13,7 @@
 String phoneNumber = "";
 String apiKey = "";
 
-void messenger_send(Unit_PoESP32 *eth, String phoneNumber, String apiKey, String message) {
+bool messenger_send(Unit_PoESP32 *eth, String phoneNumber, String apiKey, String message) {
   auto resp = eth->createSSLClient(MESSENGER_SERVER, 443);
   int idx = resp.indexOf(",CONNECT");
 
@@ -27,10 +27,12 @@ void messenger_send(Unit_PoESP32 *eth, String phoneNumber, String apiKey, String
                    + "&apikey=" + apiKey + "&text=" + urlEncode(message) + " HTTP/1.1\r\nHost: " + MESSENGER_SERVER 
                    + "\r\nConnection: close\r\n\r\n";
       
-      eth->sendTCPString(connectionId, req.c_str());
+      bool result = eth->sendTCPString(connectionId, req.c_str());
       delay(2000);
+      return result;
     }
   }
+  return false;
 }
 
 #endif

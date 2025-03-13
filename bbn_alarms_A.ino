@@ -32,6 +32,7 @@ Unit_PoESP32 eth;
 #define RUN_TIME_MS 120000
 
 bool ethUp = false;
+bool ntpUp = false;
 bool webServerUp = false;
 bool send_alarms = false;
 
@@ -112,10 +113,10 @@ void setup() {
         auto ntpRes = eth.activateNTPClient();
         if (ntpRes.indexOf("OK") != -1) {
           struct tm timeinfo;
-          bool timeOk = eth.getNTPTime(&timeinfo);
-          if (timeOk) {
+          bool ntpUp = eth.getNTPTime(&timeinfo);
+          if (ntpUp) {
             set_time(&timeinfo);
-            gen_nmea0183_txt("Got time from NTP");
+            gen_nmea0183_txt("Got time from NTP");    
           }
         }
       }
@@ -202,7 +203,7 @@ void loop() {
       messenger_send(&eth, phoneNumber, apiKey, message);
     }
   }
-  if (ethUp && send_alarms) {
+  if (ethUp && ntpUp && send_alarms) {
     float voltage = i2c_ads1115_voltage(&i2c_ads1115_sensor_1);
     float water_dist_to_sensor = gpio_jsn_sr04t_distance_cm();
     bool raise_voltage_alarm = fabs(voltage) > 0.0001 && fabs(voltage) < VOLTAGE_ALARM_THRESHOLD;

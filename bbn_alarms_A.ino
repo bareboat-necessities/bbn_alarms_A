@@ -82,6 +82,15 @@ void setup() {
     delay(10);
   }
 
+  gen_nmea0183_txt("Resetting device");
+  eth.sendCMD("AT+RST");
+  eth.waitMsg(2000, "OK");
+
+  gen_nmea0183_txt("Waiting for ethernet device connected");
+  while (!eth.checkDeviceConnect()) {
+    delay(10);
+  }
+  
   //eth.sendCMD("AT+UART_CUR=115200,8,1,0,0"); //
   //eth.waitMsg(1000, "OK", "ERROR");
 

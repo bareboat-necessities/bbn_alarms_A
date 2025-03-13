@@ -234,6 +234,7 @@ void loop() {
     }
   }
   if (send_alarms && (millis() - start_time > RUN_TIME_MS)) {
+    gen_nmea0183_msg("$BBTXT,01,01,01,%s", "Going to sleep mode");
     eth.sendCMD("AT+GSLP=" + String(SLEEP_DURATION / 1000 - 5000));
     eth.waitMsg(100, "OK", "ERROR");
     delay(200);

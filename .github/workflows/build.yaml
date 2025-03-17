@@ -31,7 +31,7 @@ jobs:
         set-build-path: true
 
     - name: Find tools
-      run: >
+      run: |
         find / -name esptool\*
         find / -name boot_app0.bin
         find . -name \*.bin

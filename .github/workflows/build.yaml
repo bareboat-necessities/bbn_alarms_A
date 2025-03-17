@@ -38,7 +38,7 @@ jobs:
 
     - name: Make zip
       run: |
-        ls /home/runner/work/bbn_alarms_A/bbn_alarms_A/build/*.bin | zip bbn_alarms_A_bin-$(date +%Y-%m-%d).zip -j -@
+        ls /home/runner/work/bbn_alarms_A/bbn_alarms_A/build/*.bin | zip bbn_alarms_A_bin_firmware-$(date +%Y-%m-%d).zip -j -@
         pwd
         ls *.zip  
 

@@ -13,6 +13,6 @@ Boat alarms and monitoring on esp32
 
 ### Default behavior
 
-By default without any configuration changes it acts as NMEA XDR sensor sending NMEA 0183 senstences via USB serial port at 115200 baud rate.
+By default without any configuration changes it acts as NMEA XDR sensor sending NMEA 0183 sentences via USB serial port at 115200 baud rate.
 
 

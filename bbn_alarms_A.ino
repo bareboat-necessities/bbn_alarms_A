@@ -214,12 +214,8 @@ void loop() {
       uint64_t last_alarm = get_last_alarm_time();
       if (last_alarm == 0 || epoch_now - last_alarm > 15 * 60) {
         String message = "Alarm";
-        if (raise_voltage_alarm) {
-          message += " Low Voltage: " + String(voltage);
-        }
-        if (raise_bilge_alarm) {
-          message += " High Bilge: " + String(water_dist_to_sensor);
-        }
+        message += (raise_voltage_alarm ? String(" Low Voltage: ") : String(" Voltage: ")) + String(voltage);
+        message += (raise_bilge_alarm ? String(" High Bilge: ") : String(" Bilge: ")) + String(water_dist_to_sensor);
         gen_nmea0183_msg("$BBTXT,01,01,01,%s", String(message).c_str());
         if (messenger_send(&eth, phoneNumber, apiKey, message)) {
           save_last_alarm_time(epoch_now);

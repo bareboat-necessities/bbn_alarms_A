@@ -9,4 +9,10 @@ Boat alarms and monitoring on esp32
 - Atomic PortABC Extension Base by m5stack:  https://shop.m5stack.com/products/atomic-portabc-extension-base
 - JSN-SR04T Waterproof Ultrasonic Sensor:  https://www.makerguides.com/interfacing-esp32-and-jsn-sr04t-waterproof-ultrasonic-sensor/
 
+## Software
+
+### Default behavior
+
+By default without any configuration changes it acts as NMEA XDR sensor sending NMEA 0183 senstences via USB serial port at 115200 baud rate.
+
 

@@ -234,7 +234,7 @@ void loop() {
     if (raise_voltage_alarm || raise_bilge_alarm) {
       uint64_t last_alarm = get_last_alarm_time();
       if (last_alarm == 0 || epoch_now - last_alarm > ALARM_PERIOD_SEC) {
-        String message = "Alarm";
+        String message = "%E2%9D%97+*Alarm*%0A";
         message += (raise_voltage_alarm ? String(" Low Voltage: ") : String(" Voltage: ")) + String(voltage);
         message += (raise_bilge_alarm ? String(" High Bilge: ") : String(" Bilge: ")) + String(water_dist_to_sensor);
         gen_nmea0183_msg("$BBTXT,01,01,01,%s", String(message).c_str());

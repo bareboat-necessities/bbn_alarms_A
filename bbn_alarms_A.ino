@@ -159,7 +159,7 @@ void loop() {
 
     // Check if a new client has connected
     int idx = response.indexOf("+IPD");
-    if (idx != -1 && idx < 1024) {
+    if (idx != -1 && idx < 6144) {
       // Extract the connection ID and data
       int connectionId = response.charAt(5 + idx) - '0';  // Get the connection ID
       String httpRequest = response.substring(7 + idx);   // Get the data

@@ -35,5 +35,18 @@ jobs:
         find /home/runner/ -name esptool\*
         find /home/runner/ -name boot_app0.bin
         find /home/runner/ -name \*.bin
-        
-      
+
+    - name: Make zip
+      run: |
+        ls /home/runner/work/bbn_alarms_A/bbn_alarms_A/build/*.bin | zip bbn_alarms_A_bin-$(date +%Y-%m-%d).zip -j -@
+        pwd
+        ls *.zip  
+
+    - name: Upload binaries to release
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: bbn_alarms_A_bin*.zip
+        tag: ${{ github.ref == 'refs/heads/main' && 'vTest' || github.ref }}
+        overwrite: true
+        file_glob: true      

@@ -24,9 +24,9 @@ By default without any configuration changes it acts as NMEA XDR sensor sending 
 # shutdown signalk
 sudo systemctl stop signalk
 
-if [ -f bbn-flash-alarm-A.sh ]; then rm bbn-flash-alarm-A.sh; fi
-wget https://raw.githubusercontent.com/bareboat-necessities/my-bareboat/refs/heads/master/m5stack-tools/bbn-flash-alarm-A.sh
-chmod +x bbn-flash-alarm-A.sh 
-./bbn-flash-alarm-A.sh -p /dev/ttyACM1
+if [ -f bbn-flash-alarms-A.sh ]; then rm bbn-flash-alarms-A.sh; fi
+wget https://raw.githubusercontent.com/bareboat-necessities/my-bareboat/refs/heads/master/m5stack-tools/bbn-flash-alarms-A.sh
+chmod +x bbn-flash-alarms-A.sh 
+./bbn-flash-alarms-A.sh -p /dev/ttyACM1
 
 ````

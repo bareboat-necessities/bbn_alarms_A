@@ -17,7 +17,7 @@ bool messenger_send(Unit_PoESP32 *eth, String phoneNumber, String apiKey, String
   auto resp = eth->createSSLClient(MESSENGER_SERVER, 443);
   int idx = resp.indexOf(",CONNECT");
 
-  if (idx != -1 && idx > 0 && idx < 2048) {
+  if (idx > 0 && idx < 2048) {
     int connectionId = resp.charAt(idx - 1) - '0';  // Get the connection ID
 
     gen_nmea0183_msg("$BBTXT,01,01,01,Established connID: %s", String(connectionId).c_str());

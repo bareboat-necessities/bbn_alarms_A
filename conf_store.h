@@ -21,6 +21,20 @@ void restore_settings() {
   preferences.end();
 }
 
+void save_voltageThreshold(float voltage_threshold) {
+  preferences.end();
+  preferences.begin("cfg_volt", false);
+  preferences.putFloat("V", voltage_threshold);
+  preferences.end();
+}
+
+void save_bilgeThreshold(float bilge_threshold) {
+  preferences.end();
+  preferences.begin("cfg_bilge", false);
+  preferences.putFloat("cm", bilge_threshold);
+  preferences.end();
+}
+
 void save_last_heartbeat_time(uint64_t epoch) {
   preferences.end();
   preferences.begin("msg-time1", false);

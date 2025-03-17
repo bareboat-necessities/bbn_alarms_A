@@ -224,7 +224,7 @@ bool Unit_PoESP32::sendTCPData(int connectionId, uint8_t* buffer, size_t size) {
   sendCMD("AT+CIPSEND=" + String(connectionId) + "," + String(size));
   _readstr = waitMsg(1000, String("OK"), String("Error"));
   if (_readstr.indexOf("OK") != -1) {
-    delay(200);
+    delay(20);
     _serial->write(buffer, size);
     _serial->print("");
     _readstr = waitMsg(10000, String("SEND"));

@@ -73,6 +73,12 @@ void setup() {
   gen_nmea0183_msg("$BBTXT,01,01,01,Loaded settings. %s",
                    (String("phone:") + phoneNumber + String(" apiKey:") + apiKey).c_str());
 
+  voltageThreshold = get_voltageThreshold();
+  gen_nmea0183_msg("$BBTXT,01,01,01,Loaded config. %s", (String("voltageThreshold:") + String(voltageThreshold)).c_str());
+
+  bilgeThreshold = get_bilgeThreshold();
+  gen_nmea0183_msg("$BBTXT,01,01,01,Loaded config. %s", (String("bilgeThreshold:") + String(bilgeThreshold)).c_str());
+
   if (phoneNumber.length() > 4 && apiKey.length() > 4) {
     send_alarms = true;
   }

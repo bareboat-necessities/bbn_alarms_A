@@ -227,11 +227,14 @@ void loop() {
     }
     uint64_t last_heartbeat = get_last_heartbeat_time();
     if (last_heartbeat == 0 || epoch_now - last_heartbeat > STATUS_PERIOD_SEC) {
-      String message = "Status Voltage: " + String(voltage) + " Bilge: " + String(water_dist_to_sensor);
-      gen_nmea0183_msg("$BBTXT,01,01,01,%s", String(message).c_str());
-      if (messenger_send(&eth, phoneNumber, apiKey, message)) {
-        save_last_heartbeat_time(epoch_now);
-      }  
+      uint64_t last_alarm = get_last_alarm_time();
+      if (last_alarm == 0 || epoch_now - last_alarm > ALARM_PERIOD_SEC) {  // Do not send status if alarm was just sent
+        String message = "Status Voltage: " + String(voltage) + " Bilge: " + String(water_dist_to_sensor);
+        gen_nmea0183_msg("$BBTXT,01,01,01,%s", String(message).c_str());
+        if (messenger_send(&eth, phoneNumber, apiKey, message)) {
+          save_last_heartbeat_time(epoch_now);
+        }
+      }
     }
   }
   if (send_alarms && (millis() - start_time > RUN_TIME_MS)) {

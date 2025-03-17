@@ -28,7 +28,7 @@ bool messenger_send(Unit_PoESP32 *eth, String phoneNumber, String apiKey, String
                    + "\r\nConnection: close\r\n\r\n";
       
       bool result = eth->sendTCPString(connectionId, req.c_str());
-      delay(2000);
+      delay(5000);
       return result;
     }
   }

@@ -3,6 +3,9 @@
 
 #include <Preferences.h>
 
+#define VOLTAGE_ALARM_THRESHOLD  11.7
+#define LEVEL_CM_ALARM_THRESHOLD 25.0
+
 // config store.
 Preferences preferences;
 
@@ -28,11 +31,27 @@ void save_voltageThreshold(float voltage_threshold) {
   preferences.end();
 }
 
+float get_voltageThreshold() {
+  preferences.end();
+  preferences.begin("cfg_volt", false);
+  float value = preferences.getFloat("V", VOLTAGE_ALARM_THRESHOLD);
+  preferences.end();
+  return value;
+}
+
 void save_bilgeThreshold(float bilge_threshold) {
   preferences.end();
   preferences.begin("cfg_bilge", false);
   preferences.putFloat("cm", bilge_threshold);
   preferences.end();
+}
+
+float get_bilgeThreshold() {
+  preferences.end();
+  preferences.begin("cfg_bilge", false);
+  float value = preferences.getFloat("cm", LEVEL_CM_ALARM_THRESHOLD);
+  preferences.end();
+  return value;
 }
 
 void save_last_heartbeat_time(uint64_t epoch) {

@@ -32,8 +32,8 @@ jobs:
 
     - name: Find tools
       run: |
-        find / -name esptool\*
-        find / -name boot_app0.bin
-        find . -name \*.bin
+        find /home/runner/ -name esptool\*
+        find /home/runner/ -name boot_app0.bin
+        find /home/runner/ -name \*.bin
         
       

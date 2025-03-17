@@ -17,7 +17,8 @@ By default without any configuration changes it acts as NMEA XDR sensor sending 
 
 
 ## Loading Firmware
-On Bareboat Necessities (BBN) OS (full)
+
+### On Bareboat Necessities (BBN) OS (full)
 
 ````
 # shutdown signalk

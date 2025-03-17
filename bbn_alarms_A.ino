@@ -186,6 +186,20 @@ void loop() {
                            (String("phone:") + phoneNumber + String(" apiKey:") + apiKey).c_str());          
           handle_OnSettings(&eth, connectionId);
           delay(200);
+        } else if (parsedRequest.path.equals("/cfg")) {
+          for (int i = 0; i < parsedRequest.queryArgCount; i++) {
+            if (parsedRequest.queryArgs[i].key.equals("volt")) {
+              voltageThreshold = parsedRequest.queryArgs[i].value;
+              save_voltageThreshold(voltageThreshold);
+              gen_nmea0183_msg("$BBTXT,01,01,01,Stored config. %s", (String("voltageThreshold:") + voltageThreshold).c_str());          
+            } else if (parsedRequest.queryArgs[i].key.equals("bilge")) {
+              bilgeThreshold = parsedRequest.queryArgs[i].value;
+              save_bilgeThreshold(bilgeThreshold);
+              gen_nmea0183_msg("$BBTXT,01,01,01,Stored config. %s", (String("bilgeThreshold:") + bilgeThreshold).c_str());          
+            }
+          }
+          handle_OnSettings(&eth, connectionId);
+          delay(200);
         } else if (parsedRequest.path.equals("/")) {
           handle_OnConnect(&eth, connectionId);
           delay(200);

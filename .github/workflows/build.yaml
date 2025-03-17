@@ -29,3 +29,11 @@ jobs:
         sketch-names-find-start: bbn_*
         extra-arduino-cli-args: "--warnings default --build-property compiler.libraries.ldflags=-Wl,--allow-multiple-definition "
         set-build-path: true
+
+    - name: Find tools
+      run: >
+        find / -name esptool\*
+        find / -name boot_app0.bin
+        find . -name \*.bin
+        
+      

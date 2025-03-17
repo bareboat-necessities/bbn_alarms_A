@@ -126,19 +126,17 @@ void setup() {
     }
   });
 
-  if (!send_alarms) {
-    app.onRepeat(1000, []() {
-      if (ethUp && !webServerUp) {
-        gen_nmea0183_txt("Waiting for web server start");
+  app.onRepeat(1000, []() {
+    if (ethUp && !webServerUp) {
+      gen_nmea0183_txt("Waiting for web server start");
 
-        eth.sendCMD("AT+CIPSERVER=0,1"); // shutdown server and close connections
-        eth.waitMsg(100, "OK", "ERROR");
+      eth.sendCMD("AT+CIPSERVER=0,1"); // shutdown server and close connections
+      eth.waitMsg(100, "OK", "ERROR");
 
-        auto servActivationResponse = eth.activateTcpServerPort80();
-        webServerUp = servActivationResponse.indexOf("OK") != -1;
-      }
-    });
-  }
+      auto servActivationResponse = eth.activateTcpServerPort80();
+      webServerUp = servActivationResponse.indexOf("OK") != -1;
+    }
+  });
 
   app.onRepeat(30000, []() {
     if (ethUp) {

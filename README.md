@@ -16,3 +16,16 @@ Boat alarms and monitoring on esp32
 By default without any configuration changes it acts as NMEA XDR sensor sending NMEA 0183 sentences via USB serial port at 115200 baud rate.
 
 
+## Loading Firmware
+On Bareboat Necessities (BBN) OS (full)
+
+````
+# shutdown signalk
+sudo systemctl stop signalk
+
+if [ -f bbn-flash-alarm-A.sh ]; then rm bbn-flash-alarm-A.sh; fi
+wget https://raw.githubusercontent.com/bareboat-necessities/my-bareboat/refs/heads/master/m5stack-tools/bbn-flash-alarm-A.sh
+chmod +x bbn-flash-alarm-A.sh 
+./bbn-flash-alarm-A.sh -p /dev/ttyACM1
+
+````

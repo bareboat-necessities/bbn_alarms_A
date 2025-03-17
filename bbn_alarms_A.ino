@@ -26,6 +26,9 @@ static const char* firmware_tag = "bbn_alarms_A";
 
 Unit_PoESP32 eth;
 
+#define ALARM_PERIOD_SEC (15 * 60)
+#define STATUS_PERIOD_SEC (12 * 60 * 60)
+
 #define VOLTAGE_ALARM_THRESHOLD  11.7
 #define LEVEL_CM_ALARM_THRESHOLD 25.0
 
@@ -212,7 +215,7 @@ void loop() {
     uint64_t epoch_now = (uint64_t) time(NULL);
     if (raise_voltage_alarm || raise_bilge_alarm) {
       uint64_t last_alarm = get_last_alarm_time();
-      if (last_alarm == 0 || epoch_now - last_alarm > 15 * 60) {
+      if (last_alarm == 0 || epoch_now - last_alarm > ALARM_PERIOD_SEC) {
         String message = "Alarm";
         message += (raise_voltage_alarm ? String(" Low Voltage: ") : String(" Voltage: ")) + String(voltage);
         message += (raise_bilge_alarm ? String(" High Bilge: ") : String(" Bilge: ")) + String(water_dist_to_sensor);
@@ -223,7 +226,7 @@ void loop() {
       }
     }
     uint64_t last_heartbeat = get_last_heartbeat_time();
-    if (last_heartbeat == 0 || epoch_now - last_heartbeat > 12 * 60 * 60) {
+    if (last_heartbeat == 0 || epoch_now - last_heartbeat > STATUS_PERIOD_SEC) {
       String message = "Status Voltage: " + String(voltage) + " Bilge: " + String(water_dist_to_sensor);
       gen_nmea0183_msg("$BBTXT,01,01,01,%s", String(message).c_str());
       if (messenger_send(&eth, phoneNumber, apiKey, message)) {

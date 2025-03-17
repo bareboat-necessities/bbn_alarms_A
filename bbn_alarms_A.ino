@@ -29,9 +29,6 @@ Unit_PoESP32 eth;
 #define ALARM_PERIOD_SEC (15 * 60)
 #define STATUS_PERIOD_SEC (12 * 60 * 60)
 
-#define VOLTAGE_ALARM_THRESHOLD  11.7
-#define LEVEL_CM_ALARM_THRESHOLD 25.0
-
 #define RUN_TIME_MS 120000
 
 float voltageThreshold = VOLTAGE_ALARM_THRESHOLD;

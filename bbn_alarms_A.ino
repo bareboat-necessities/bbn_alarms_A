@@ -34,6 +34,9 @@ Unit_PoESP32 eth;
 
 #define RUN_TIME_MS 120000
 
+float voltageThreshold = VOLTAGE_ALARM_THRESHOLD;
+float bilgeThreshold = LEVEL_CM_ALARM_THRESHOLD;
+
 bool ethUp = false;
 bool ntpUp = false;
 bool webServerUp = false;
@@ -221,8 +224,8 @@ void loop() {
   if (ethUp && ntpUp && send_alarms) {
     float voltage = i2c_ads1115_voltage(&i2c_ads1115_sensor_1);
     float water_dist_to_sensor = gpio_jsn_sr04t_distance_cm();
-    bool raise_voltage_alarm = fabs(voltage) > 0.0001 && fabs(voltage) < VOLTAGE_ALARM_THRESHOLD;
-    bool raise_bilge_alarm = fabs(water_dist_to_sensor) < LEVEL_CM_ALARM_THRESHOLD;
+    bool raise_voltage_alarm = fabs(voltage) > 0.0001 && fabs(voltage) < voltageThreshold;
+    bool raise_bilge_alarm = fabs(water_dist_to_sensor) < bilgeThreshold;
 
     uint64_t epoch_now = (uint64_t) time(NULL);
     if (raise_voltage_alarm || raise_bilge_alarm) {

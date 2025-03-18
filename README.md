@@ -24,6 +24,13 @@ For sensing alarms the device needs to be connected to the Ethernet port of the 
 - Atomic PortABC Extension Base by m5stack:  https://shop.m5stack.com/products/atomic-portabc-extension-base
 - JSN-SR04T Waterproof Ultrasonic Sensor (for bilge water level):  https://www.makerguides.com/interfacing-esp32-and-jsn-sr04t-waterproof-ultrasonic-sensor/
 
+### Accessories
+
+- 50x80mm waterproof box with baseplate, clear hinged cover, mounting legs, stainless steel hardware
+- waterproof cable glands
+- grove cables
+- standoffs
+
 ### JSN-SR04T Waterproof Ultrasonic Sensor to NMEA 0183 XDR
 
 https://www.makerguides.com/interfacing-esp32-and-jsn-sr04t-waterproof-ultrasonic-sensor/

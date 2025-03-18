@@ -30,3 +30,36 @@ chmod +x bbn-flash-alarms-A.sh
 ./bbn-flash-alarms-A.sh -p /dev/ttyACM1
 
 ````
+
+### Reading serial port
+
+````
+stty -F /dev/ttyACM1 38400
+socat stdio /dev/ttyACM1
+````
+
+## Configuration
+
+### Setting WhatsApp API key and phone:
+
+````
+curl "http://192.168.1.53/settings?phone=17321111111&key=1111111"
+````
+
+To find IP address of the device check output from serial port.
+
+### Setting alarm thresholds
+
+Voltage threshold (Volts):
+
+````
+curl "http://192.168.1.53/cfg?volt=11.7"
+````
+
+
+Bilge level threshold (cm):
+
+````
+curl "http://192.168.1.53/cfg?bilge=25.0"
+````
+

@@ -30,6 +30,7 @@ For sensing alarms the device needs to be connected to the Ethernet port of the 
 - waterproof cable glands
 - grove cables
 - standoffs
+- stainless steel mounting screws
 
 ### JSN-SR04T Waterproof Ultrasonic Sensor to NMEA 0183 XDR
 

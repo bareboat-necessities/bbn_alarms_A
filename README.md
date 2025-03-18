@@ -1,5 +1,8 @@
 # bbn_alarms_A
-Boat alarms and monitoring on esp32
+Boat alarms and monitoring on esp32.
+
+Open source device for sending high bilge level and low battery voltage alarms via WhatsApp.
+It also can be used as a simple bilge level and battery voltage NMEA-0183 XDR sensor.
 
 ## Hardware
 

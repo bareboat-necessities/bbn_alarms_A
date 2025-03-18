@@ -115,7 +115,7 @@ To find IP address of the device check output from serial port.
 
 Connect your device to the Ethernet port on your boat router, power on via USB. Open http://192.168.1.53/ in the browser, fill out the required fields on the form and click 'Submit'.
 
-NOTE: IP address might be different, so check the output from USB serial port.
+NOTE: You device IP address might be different, so check the output from USB serial port.
 
 <p align="center">
 <img src="./img/bbn_alarms_api_key.png?raw=true" style="width: 40%; height: auto;" alt="BBN Bilge Level Sensor" />

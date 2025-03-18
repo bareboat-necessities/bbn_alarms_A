@@ -45,6 +45,16 @@ $BBTXT,01,01,01,Going to sleep mode*46
 
 ````
 
+### Integration with SignalK
+
+Integration with SignalK is done via NMEA XDR Parser SignalK plugin.
+
+More: https://github.com/GaryWSmith/xdr-parser-plugin
+
+Recommended config file for XDR Parser SignalK plugin:
+
+https://github.com/bareboat-necessities/lysmarine_gen/blob/bookworm/install-scripts/4-server/files/xdrParser-plugin.json
+
 ## Loading Firmware
 
 ### On Bareboat Necessities (BBN) OS (full)

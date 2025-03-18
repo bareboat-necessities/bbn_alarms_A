@@ -6,6 +6,8 @@ It also can be used as a simple bilge level and battery voltage NMEA-0183 XDR se
 
 No soldering required. Connect sensors to Atomic PortABC Extension Base. Load firmware to atomS3-lite. (On Bareboat Necessites OS it's just copy-paste of a script, see below). Plug and play.
 
+For sensing alarms the device needs to be connected to the Ethernet port of the boat router via Ethernet cable.
+
 ## Hardware
 
 - atomS3-lite by m5stack:  https://shop.m5stack.com/products/atoms3-lite-esp32s3-dev-kit

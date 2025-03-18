@@ -16,6 +16,34 @@ For sensing alarms the device needs to be connected to the Ethernet port of the 
 - Atomic PortABC Extension Base by m5stack:  https://shop.m5stack.com/products/atomic-portabc-extension-base
 - JSN-SR04T Waterproof Ultrasonic Sensor (for bilge water level):  https://www.makerguides.com/interfacing-esp32-and-jsn-sr04t-waterproof-ultrasonic-sensor/
 
+### JSN-SR04T Waterproof Ultrasonic Sensor to NMEA 0183 XDR
+
+https://www.makerguides.com/interfacing-esp32-and-jsn-sr04t-waterproof-ultrasonic-sensor/
+
+https://bitbucket.org/teckel12/arduino-new-ping/wiki/Home
+
+Connecting to m5stack atomS3-Lite
+
+Pins:
+
+- G8 to Echo_TX
+- G7 to Trig_RX
+- VCC 3.3 to VCC
+- GND to GND
+
+Bilge Level Sensor
+
+Install it into a cap of PVC pipe.
+Drill a hole for air to escape.
+Mount PVC pipe with sensor on top of it
+in a bilge. The sensor will measure distance to water surface in the bilge,
+giving you bilge level.
+
+<p align="center">
+<img src="./bilge_level_sensor.jpg?raw=true" alt="BBN Bilge Level Sensor" />
+</p>
+
+
 ## Software
 
 ### Default behavior

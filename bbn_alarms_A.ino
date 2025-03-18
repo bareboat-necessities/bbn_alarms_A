@@ -235,8 +235,8 @@ void loop() {
       uint64_t last_alarm = get_last_alarm_time();
       if (last_alarm == 0 || epoch_now - last_alarm > ALARM_PERIOD_SEC) {
         String message = "Alarm!";
-        message += " Batt: " + String(voltage) + " V - " + (raise_voltage_alarm ? String("Low,") : String("Ok,"));
-        message += " Bilge: " + String(water_dist_to_sensor) + " cm - " + (raise_bilge_alarm ? String("High") : String("Ok"));
+        message += " Batt: " + String(voltage) + "V - " + (raise_voltage_alarm ? String("Low,") : String("Ok,"));
+        message += " Bilge: " + String(water_dist_to_sensor) + "cm - " + (raise_bilge_alarm ? String("High") : String("Ok"));
         gen_nmea0183_msg("$BBTXT,01,01,01,%s", String(message).c_str());
         if (messenger_send(&eth, phoneNumber, apiKey, message)) {
           save_last_alarm_time(epoch_now);
@@ -247,7 +247,7 @@ void loop() {
     if (last_heartbeat == 0 || epoch_now - last_heartbeat > STATUS_PERIOD_SEC) {
       uint64_t last_alarm = get_last_alarm_time();
       if (last_alarm == 0 || epoch_now - last_alarm > ALARM_PERIOD_SEC) {  // Do not send status if alarm was just sent
-        String message = "Status. Batt: " + String(voltage) + " V - Ok, Bilge: " + String(water_dist_to_sensor) + " cm - Ok";
+        String message = "Status. Batt: " + String(voltage) + "V - Ok, Bilge: " + String(water_dist_to_sensor) + "cm - Ok";
         gen_nmea0183_msg("$BBTXT,01,01,01,%s", String(message).c_str());
         if (messenger_send(&eth, phoneNumber, apiKey, message)) {
           save_last_heartbeat_time(epoch_now);

@@ -72,6 +72,8 @@ To find IP address of the device check output from serial port.
 curl "http://192.168.1.53/settings?phone=17321111111&key=1111111"
 ````
 
+Power cycle the device and after that it should run in alarms mode (15 min cat naps/sleeps with 2 minutes run cycles).
+
 ### Setting alarm thresholds
 
 Voltage threshold (Volts):

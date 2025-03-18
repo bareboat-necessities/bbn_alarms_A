@@ -40,7 +40,7 @@ in a bilge. The sensor will measure distance to water surface in the bilge,
 giving you bilge level.
 
 <p align="center">
-<img src="./bilge_level_sensor.jpg?raw=true" alt="BBN Bilge Level Sensor" />
+<img src="./img/bilge_level_sensor.jpg?raw=true" alt="BBN Bilge Level Sensor" />
 </p>
 
 

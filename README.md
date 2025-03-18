@@ -118,7 +118,7 @@ Connect your device to the Ethernet port on your boat router, power on via USB. 
 NOTE: You device IP address might be different, so check the output from USB serial port.
 
 <p align="center">
-<img src="./img/bbn_alarms_api_key.png?raw=true" style="width: 40%; height: auto;" alt="BBN Bilge Level Sensor" />
+<img src="./img/bbn_alarms_api_key.png?raw=true" style="width: 60%; height: auto;" alt="BBN Bilge Level Sensor" />
 </p>
 
 Or you could do it via command line:

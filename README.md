@@ -40,13 +40,13 @@ socat stdio /dev/ttyACM1
 
 ## Configuration
 
+To find IP address of the device check output from serial port.
+
 ### Setting WhatsApp API key and phone:
 
 ````
 curl "http://192.168.1.53/settings?phone=17321111111&key=1111111"
 ````
-
-To find IP address of the device check output from serial port.
 
 ### Setting alarm thresholds
 

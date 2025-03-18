@@ -15,6 +15,30 @@ Boat alarms and monitoring on esp32
 
 By default without any configuration changes it acts as NMEA XDR sensor sending NMEA 0183 sentences via USB serial port at 115200 baud rate.
 
+````
+$BBTXT,01,01,01,FirmwareTag: bbn_alarms_A*0F
+$BBTXT,01,01,01,Loaded settings. phone:17321111111 apiKey:1111111*15
+$BBTXT,01,01,01,Loaded config. voltageThreshold:11.70*7C
+$BBTXT,01,01,01,Loaded config. bilgeThreshold:25.00*7B
+$BBTXT,01,01,01,VOLTAGE found ads1115 sensor at address=0x49 alt bus*2F
+$BBTXT,01,01,01,Waiting for ethernet device connected*1F
+$BBTXT,01,01,01,Resetting device*20
+$BBTXT,01,01,01,Waiting for ethernet device connected*1F
+$BBXDR,U,0.000,V,VOLT_1*0C
+$BBXDR,D,0.20,M,Range_JSN_S04T*50
+$BBTXT,01,01,01,Waiting for ethernet connected*27
+$BBTXT,01,01,01,Waiting for ethernet connected*27
+$BBTXT,01,01,01,LocalIP: 192.168.1.53*0B
+$BBTXT,01,01,01,Got time from NTP*6C
+$BBXDR,U,0.000,V,VOLT_1*0C
+$BBXDR,D,0.20,M,Range_JSN_S04T*50
+$BBTXT,01,01,01,Waiting for web server start*7C
+$BBXDR,U,0.000,V,VOLT_1*0C
+$BBXDR,D,0.20,M,Range_JSN_S04T*50
+$BBTXT,01,01,01,Received data from connID: 0*7B
+$BBTXT,01,01,01,Going to sleep mode*46
+
+````
 
 ## Loading Firmware
 

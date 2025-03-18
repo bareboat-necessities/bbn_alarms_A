@@ -8,6 +8,14 @@ No soldering required. Connect sensors to Atomic PortABC Extension Base. Load fi
 
 For sensing alarms the device needs to be connected to the Ethernet port of the boat router via Ethernet cable.
 
+<p align="center">
+<img src="./img/bbn_alarms_6.jpg?raw=true" style="width: 60%; height: auto;" alt="BBN Alarms pic1" />
+</p>
+
+<p align="center">
+<img src="./img/bbn_alarms_1.jpg?raw=true" style="width: 60%; height: auto;" alt="BBN Alarms pic2" />
+</p>
+
 ## Hardware
 
 - atomS3-lite by m5stack:  https://shop.m5stack.com/products/atoms3-lite-esp32s3-dev-kit

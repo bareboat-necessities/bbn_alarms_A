@@ -4,10 +4,6 @@ Boat alarms and monitoring on esp32.
 Open source device for sending high bilge level and low battery voltage alarms via WhatsApp.
 It also can be used as a simple bilge level and battery voltage NMEA-0183 XDR sensor.
 
-No soldering required. Connect sensors to Atomic PortABC Extension Base. Load firmware to atomS3-lite. (On Bareboat Necessites OS it's just copy-paste of a script, see below). Plug and play. IKEA furniture will take you longer to put thogether than this assuming you got the parts.
-
-For sensing alarms the device needs to be connected to the Ethernet port of the boat router via Ethernet cable.
-
 <p align="center">
 <img src="./img/bbn_alarms1.jpg?raw=true" style="width: 40%; height: auto;" alt="BBN Alarms pic1" />
 </p>
@@ -15,6 +11,10 @@ For sensing alarms the device needs to be connected to the Ethernet port of the 
 <p align="center">
 <img src="./img/bbn_alarms5.jpg?raw=true" style="width: 40%; height: auto;" alt="BBN Alarms pic1" />
 </p>
+
+No soldering required. Connect sensors to Atomic PortABC Extension Base. Load firmware to atomS3-lite. (On Bareboat Necessites OS it's just copy-paste of a script, see below). Plug and play. IKEA furniture will take you longer to put thogether than this assuming you got the parts.
+
+For sensing alarms the device needs to be connected to the Ethernet port of the boat router via Ethernet cable.
 
 <p align="center">
 <img src="./img/bbn_alarms_6.jpg?raw=true" style="width: 40%; height: auto;" alt="BBN Alarms pic1" />

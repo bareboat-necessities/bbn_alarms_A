@@ -6,9 +6,6 @@ It also can be used as a simple bilge level and battery voltage NMEA-0183 XDR se
 
 <p align="center">
 <img src="./img/bbn_alarms1.jpg?raw=true" style="width: 40%; height: auto;" alt="BBN Alarms pic1" />
-</p>
-
-<p align="center">
 <img src="./img/bbn_alarms5.jpg?raw=true" style="width: 40%; height: auto;" alt="BBN Alarms pic1" />
 </p>
 

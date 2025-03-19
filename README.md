@@ -120,7 +120,7 @@ ls -ltr /dev/tty*
 with the device unplugged from USB and plugged into USB.
 
 
-Load the firmware:
+#### Load the firmware:
 
 ````
 # shutdown signalk

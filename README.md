@@ -130,6 +130,8 @@ socat stdio /dev/ttyACM1
 
 To find IP address of the device check output from serial port.
 
+Instructions to generate API key: https://www.callmebot.com/blog/free-api-whatsapp-messages/
+
 ### Setting WhatsApp API key and phone:
 
 Connect your device to the Ethernet port on your boat router, power on via USB. Open http://192.168.1.53/ in the browser, fill out the required fields on the form and click 'Submit'.

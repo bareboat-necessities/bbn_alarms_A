@@ -108,6 +108,8 @@ https://github.com/bareboat-necessities/lysmarine_gen/blob/bookworm/install-scri
 
 ### On Bareboat Necessities (BBN) OS (full)
 
+Lomg press side button on atomS3 till you see green to enter mode for uploading firmware.
+
 ````
 # shutdown signalk
 sudo systemctl stop signalk

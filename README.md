@@ -130,7 +130,7 @@ socat stdio /dev/ttyACM1
 
 To find IP address of the device check output from serial port.
 
-Instructions to generate API key to send WhatsApp messages: https://www.callmebot.com/blog/free-api-whatsapp-messages/
+Instructions to generate API key to send WhatsApp messages: https://www.callmebot.com/
 
 ### Setting WhatsApp API key and phone:
 

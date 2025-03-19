@@ -31,11 +31,11 @@ float i2c_ads1115_voltage(ADS1115 *i2c_ads1115_sensor) {
 }
 
 void i2c_ads1115_report(ADS1115 *i2c_ads1115_sensor) {
-  float voltage = i2c_ads1115_voltage(i2c_ads1115_sensor);
+  float voltage = i2c_ads1115_voltage(i2c_ads1115_sensor) / 1000;
   if (i2c_ads1115_sensor == &i2c_ads1115_sensor_0) {
-    gen_nmea0183_xdr("$BBXDR,U,%.3f,V,VOLT", voltage / 1000);     // Volt
+    gen_nmea0183_xdr("$BBXDR,U,%.3f,V,VOLT", voltage);     // Volt
   } else {
-    gen_nmea0183_xdr("$BBXDR,U,%.3f,V,VOLT_1", voltage / 1000);   // Volt
+    gen_nmea0183_xdr("$BBXDR,U,%.3f,V,VOLT_1", voltage);   // Volt
   }
 }
 

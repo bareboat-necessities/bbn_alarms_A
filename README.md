@@ -126,7 +126,7 @@ Unplug and plug the device into USB to reboot.
 ### Reading serial port
 
 ````
-stty -F /dev/ttyACM1 38400
+stty -F /dev/ttyACM1 115200
 socat stdio /dev/ttyACM1
 ````
 

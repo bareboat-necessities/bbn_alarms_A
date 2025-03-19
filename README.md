@@ -121,6 +121,8 @@ chmod +x bbn-flash-alarms-A.sh
 
 ````
 
+Unplug and plug the device into USB to reboot.
+
 ### Reading serial port
 
 ````

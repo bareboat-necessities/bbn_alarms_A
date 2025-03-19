@@ -34,6 +34,7 @@ For sensing alarms the device needs to be connected to the Ethernet port of the 
 - grove cables
 - standoffs
 - stainless steel mounting screws
+- m5stack screw kit:   https://shop.m5stack.com/products/16-pcs-m3-12-18-25-32-screw-with-allen-key
 
 ### JSN-SR04T Waterproof Ultrasonic Sensor to NMEA 0183 XDR
 

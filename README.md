@@ -119,6 +119,9 @@ ls -ltr /dev/tty*
 
 with the device unplugged from USB and plugged into USB.
 
+
+Load the firmware:
+
 ````
 # shutdown signalk
 sudo systemctl stop signalk

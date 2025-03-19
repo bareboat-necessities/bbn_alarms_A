@@ -15,11 +15,9 @@ For sensing alarms the device needs to be connected to the Ethernet port of the 
 
 <p align="center">
 <img src="./img/bbn_alarms_6.jpg?raw=true" style="width: 40%; height: auto;" alt="BBN Alarms pic1" />
-</p>
-
-<p align="center">
 <img src="./img/bbn_alarms_1.jpg?raw=true" style="width: 40%; height: auto;" alt="BBN Alarms pic2" />
 </p>
+
 
 ## Hardware
 

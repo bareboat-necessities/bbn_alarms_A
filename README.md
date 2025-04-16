@@ -32,7 +32,7 @@ For sensing alarms the device needs to be connected to the Ethernet port of the 
 - 4.7"x3.5"x2.7" waterproof box with baseplate, clear hinged cover, mounting legs, stainless steel hardware
 - waterproof cable glands
 - grove cables
-- standoffs
+- M3 standoffs
 - stainless steel mounting screws
 - m5stack screw kit:   https://shop.m5stack.com/products/16-pcs-m3-12-18-25-32-screw-with-allen-key
 - Vertical Mount PCB Circuit Board Card Slot Guide Rail Holder Bar:  https://www.amazon.com/Uxcell-a15080400ux0550-Vertical-Circuit-Holder/dp/B016PO0K7M/

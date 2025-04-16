@@ -192,3 +192,4 @@ Project Home:  https://bareboat-necessities.github.io/
 - Instruments Displays on esp32: https://github.com/bareboat-necessities/bbn-m5stack-tough
 - Boat Heave Sensor: https://github.com/bareboat-necessities/bbn-wave-period-esp32
 - I2C over USB for Linux: https://github.com/bareboat-necessities/bbn-i2c-over-usb
+- N2K Senders: https://github.com/bareboat-necessities/bbn-m5-s3-n2k-i2c

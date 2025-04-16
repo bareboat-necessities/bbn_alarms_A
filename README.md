@@ -29,7 +29,7 @@ For sensing alarms the device needs to be connected to the Ethernet port of the 
 
 ### Accessories
 
-- 50x80mm waterproof box with baseplate, clear hinged cover, mounting legs, stainless steel hardware
+- 4.7"x3.5"2.7" waterproof box with baseplate, clear hinged cover, mounting legs, stainless steel hardware
 - waterproof cable glands
 - grove cables
 - standoffs
